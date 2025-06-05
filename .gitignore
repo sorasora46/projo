@@ -1,0 +1,48 @@
+# === General ===
+.env*
+.DS_Store
+Thumbs.db
+*.log
+
+# === IDEs / Editors ===
+.vscode/
+.idea/
+*.swp
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# === Go (Golang) ===
+**/*.exe
+**/*.exe~
+**/*.dll
+**/*.so
+**/*.dylib
+**/*.test
+**/*.out
+**/bin/
+**/build/
+**/coverage/
+**/vendor/
+go.sum
+go.work
+go.work.sum
+
+# === Node.js (Frontend) ===
+**/node_modules/
+**/dist/
+**/.env.local
+**/.env.*
+**/.turbo/
+**/.parcel-cache/
+**/.vite/
+**/.eslintcache
+**/coverage/
+**/dist-ssr
+**/*.local
+
+# === Package Manager Logs ===
+**/pnpm-debug.log*
