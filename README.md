@@ -1,12 +1,16 @@
 # projo
 Minimalist project tracker written with React.js + Go Fiber
 
-### TODO
- - [ ] create login page [frontend]
- - [ ] create home page [frontend]
- - [ ] create login endpoint [backend]
- - [ ] handle auth middleware [backend]
- - [x] create CRUD user endpoint [backend]
- - [x] setup GORM (better structured code) [backend]
- - [x] refactor init ENV [backend]
- - [ ] create unit test for user CRUD [backend]
+### TODO [frontend]
+ - [ ] create login page
+ - [ ] create home page
+### TODO [backend]
+ - [ ] create unit test for user CRUD
+ - [ ] create CRUD project endpoint
+ - [ ] refactor response objs
+ - [ ] refactor error handling
+ - [x] create login endpoint
+ - [x] handle auth middleware
+ - [x] create CRUD user endpoint
+ - [x] setup GORM (better structured code)
+ - [x] refactor init ENV
