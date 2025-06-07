@@ -2,6 +2,7 @@ package infras
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"gorm.io/driver/postgres"
@@ -9,7 +10,7 @@ import (
 )
 
 type Database interface {
-	InitDB(dsn string) error
+	InitDB(dsn string)
 	GetDBInstance() (*gorm.DB, error)
 	migrateSchemas() error
 }
@@ -22,16 +23,15 @@ func NewDatabase() Database {
 	return &GormDatabase{}
 }
 
-func (d *GormDatabase) InitDB(dsn string) error {
+func (d *GormDatabase) InitDB(dsn string) {
 	var err error
 	d.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 	if err := d.migrateSchemas(); err != nil {
-		return nil
+		log.Fatal(err)
 	}
-	return nil
 }
 
 func (d *GormDatabase) GetDBInstance() (*gorm.DB, error) {
