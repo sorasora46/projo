@@ -18,7 +18,7 @@ func main() {
 	database.InitDB(envManager.DB_DSN)
 
 	// INIT ROUTES
-	routers.InitRoutes(app, database)
+	routers.InitRoutes(app, database, *envManager)
 
 	app.Listen(envManager.ADDR)
 }

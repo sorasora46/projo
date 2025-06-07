@@ -1,10 +1,12 @@
 package usecases
 
 import (
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
 	"github.com/sorasora46/projo/backend/internal/entities"
+	"github.com/sorasora46/projo/backend/internal/infras"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -12,14 +14,16 @@ type UserUsecase interface {
 	CreateUser(req dtos.CreateUserReq) error
 	GetByUsername(username string) (*dtos.UserDTO, error)
 	DeleteByUsername(username string) error
+	Login(username string, password string) (*string, error)
 }
 
 type UserService struct {
-	repo interfaces.UserRepository
+	envManager infras.EnvManager
+	repo       interfaces.UserRepository
 }
 
-func NewUserUsercase(repo interfaces.UserRepository) UserUsecase {
-	return &UserService{repo: repo}
+func NewUserUsercase(repo interfaces.UserRepository, envManager infras.EnvManager) UserUsecase {
+	return &UserService{repo: repo, envManager: envManager}
 }
 
 func (u *UserService) CreateUser(req dtos.CreateUserReq) error {
@@ -63,4 +67,20 @@ func (u *UserService) DeleteByUsername(username string) error {
 		return err
 	}
 	return nil
+}
+
+func (u *UserService) Login(username string, password string) (*string, error) {
+	hashedPassword, err := u.repo.GetHashedPasswordByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+	if err := bcrypt.CompareHashAndPassword(hashedPassword, []byte(password)); err != nil {
+		return nil, err
+	}
+	token := jwt.New(jwt.SigningMethodHS384)
+	signedToken, err := token.SignedString([]byte(u.envManager.JWT_SIGN_KEY))
+	if err != nil {
+		return nil, err
+	}
+	return &signedToken, nil
 }

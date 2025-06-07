@@ -38,3 +38,12 @@ func (u *UserRepositoryImpl) DeleteByUsername(username string) error {
 	}
 	return nil
 }
+
+func (u *UserRepositoryImpl) GetHashedPasswordByUsername(username string) ([]byte, error) {
+	var user entities.User
+	transaction := u.db.Select("hashed_password").Where("username = ?", username).First(&user)
+	if transaction.Error != nil {
+		return nil, transaction.Error
+	}
+	return user.HashedPassword, nil
+}

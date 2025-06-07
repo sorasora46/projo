@@ -6,4 +6,5 @@ type UserRepository interface {
 	Create(user entities.User) error
 	GetByUsername(username string) (*entities.User, error)
 	DeleteByUsername(username string) error
+	GetHashedPasswordByUsername(username string) ([]byte, error)
 }

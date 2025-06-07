@@ -9,16 +9,17 @@ import (
 )
 
 type EnvManager struct {
-	ENV         string
-	HOST        string
-	PORT        string
-	ADDR        string
-	DB_HOST     string
-	DB_PORT     string
-	DB_USERNAME string
-	DB_PASSWORD string
-	DB_NAME     string
-	DB_DSN      string
+	ENV          string
+	HOST         string
+	PORT         string
+	ADDR         string
+	DB_HOST      string
+	DB_PORT      string
+	DB_USERNAME  string
+	DB_PASSWORD  string
+	DB_NAME      string
+	DB_DSN       string
+	JWT_SIGN_KEY string
 }
 
 func NewEnvManager() *EnvManager {
@@ -42,6 +43,7 @@ func (e *EnvManager) InitEnv() {
 
 	e.readServerEnv()
 	e.readDBEnv()
+	e.readCredentialEnv()
 }
 
 func (e *EnvManager) readServerEnv() {
@@ -59,4 +61,8 @@ func (e *EnvManager) readDBEnv() {
 	e.DB_DSN = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		e.DB_HOST, e.DB_PORT, e.DB_USERNAME, e.DB_PASSWORD, e.DB_NAME,
 	)
+}
+
+func (e *EnvManager) readCredentialEnv() {
+	e.JWT_SIGN_KEY = os.Getenv("JWT_SIGN_KEY")
 }
