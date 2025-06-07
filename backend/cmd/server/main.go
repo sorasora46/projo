@@ -40,9 +40,12 @@ func main() {
 	DSN := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME,
 	)
-	infras.InitDB(DSN)
+	database := infras.NewDatabase()
+	if err := database.InitDB(DSN); err != nil {
+		log.Printf("error initializing database: %v", err)
+	}
 
-	routers.InitRoutes(app)
+	routers.InitRoutes(app, database)
 
 	app.Listen(ADDR)
 }

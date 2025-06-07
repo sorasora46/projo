@@ -1,31 +1,39 @@
 package usecases
 
+import (
+	"github.com/google/uuid"
+	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
+	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/entities"
+	"golang.org/x/crypto/bcrypt"
+)
+
 type UserUsecase interface {
-	Create()
-	Get()
-	Update()
-	Delete()
+	CreateUser(req dtos.CreateUserReq) error
+	GetByUsername(username string) (*dtos.UserDTO, error)
+	DeleteByUsername(username string) error
 }
 
 type UserService struct {
-	repo any
+	repo interfaces.UserRepository
 }
 
-func NewUserUsercase(repo any) UserUsecase {
+func NewUserUsercase(repo interfaces.UserRepository) UserUsecase {
 	return &UserService{repo: repo}
 }
 
 func (u *UserService) CreateUser(req dtos.CreateUserReq) error {
-	// TODO: hash password
-	// TODO: add password to user entity
-	// hashe
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
 	newUser := entities.User{
-		Id:        uuid.NewString(),
-		FirstName: req.FirstName,
-		LastName:  req.LastName,
-		Username:  req.Username,
-		Email:     req.Email,
-		HashedPassword: ,
+		Id:             uuid.NewString(),
+		FirstName:      req.FirstName,
+		LastName:       req.LastName,
+		Username:       req.Username,
+		Email:          req.Email,
+		HashedPassword: hashedPassword,
 	}
 	if err := u.repo.Create(newUser); err != nil {
 		return err
