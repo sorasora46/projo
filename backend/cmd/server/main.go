@@ -15,10 +15,10 @@ func main() {
 
 	// INIT DATABASE
 	database := infras.NewDatabase()
-	database.InitDB(envManager.DB_DSN)
+	database.InitDB(envManager.GetDBDSN())
 
 	// INIT ROUTES
-	routers.InitRoutes(app, database, *envManager)
+	routers.InitRoutes(app, database, envManager)
 
-	app.Listen(envManager.ADDR)
+	app.Listen(envManager.GetAddr())
 }

@@ -41,7 +41,7 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 	}
 
 	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
-		return []byte(a.envManager.JWT_SIGN_KEY), nil
+		return []byte(a.envManager.GetJWTSignKey()), nil
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS384.Alg()}))
 	if err != nil {
 		return c.Status(401).JSON(dtos.CommonRes{

@@ -78,7 +78,7 @@ func (u *UserService) Login(username string, password string) (*string, error) {
 		return nil, err
 	}
 	token := jwt.New(jwt.SigningMethodHS384)
-	signedToken, err := token.SignedString([]byte(u.envManager.JWT_SIGN_KEY))
+	signedToken, err := token.SignedString([]byte(u.envManager.GetJWTSignKey()))
 	if err != nil {
 		return nil, err
 	}

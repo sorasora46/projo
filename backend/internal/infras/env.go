@@ -8,7 +8,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type EnvManager struct {
+type EnvManager interface {
+	InitEnv()
+	GetAddr() string
+	GetDBDSN() string
+	GetJWTSignKey() string
+}
+
+type EnvManagerImpl struct {
 	ENV          string
 	HOST         string
 	PORT         string
@@ -22,11 +29,11 @@ type EnvManager struct {
 	JWT_SIGN_KEY string
 }
 
-func NewEnvManager() *EnvManager {
-	return &EnvManager{}
+func NewEnvManager() EnvManager {
+	return &EnvManagerImpl{}
 }
 
-func (e *EnvManager) InitEnv() {
+func (e *EnvManagerImpl) InitEnv() {
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("error loading .env file: %v", err)
@@ -46,13 +53,13 @@ func (e *EnvManager) InitEnv() {
 	e.readCredentialEnv()
 }
 
-func (e *EnvManager) readServerEnv() {
+func (e *EnvManagerImpl) readServerEnv() {
 	e.HOST = os.Getenv("HOST")
 	e.PORT = os.Getenv("PORT")
 	e.ADDR = fmt.Sprintf("%s:%s", e.HOST, e.PORT)
 }
 
-func (e *EnvManager) readDBEnv() {
+func (e *EnvManagerImpl) readDBEnv() {
 	e.DB_HOST = os.Getenv("DB_HOST")
 	e.DB_PORT = os.Getenv("DB_PORT")
 	e.DB_USERNAME = os.Getenv("DB_USERNAME")
@@ -63,6 +70,18 @@ func (e *EnvManager) readDBEnv() {
 	)
 }
 
-func (e *EnvManager) readCredentialEnv() {
+func (e *EnvManagerImpl) readCredentialEnv() {
 	e.JWT_SIGN_KEY = os.Getenv("JWT_SIGN_KEY")
+}
+
+func (e *EnvManagerImpl) GetAddr() string {
+	return e.ADDR
+}
+
+func (e *EnvManagerImpl) GetDBDSN() string {
+	return e.DB_DSN
+}
+
+func (e *EnvManagerImpl) GetJWTSignKey() string {
+	return e.JWT_SIGN_KEY
 }
