@@ -45,5 +45,8 @@ func (d *GormDatabase) migrateSchemas() error {
 	if err := d.db.AutoMigrate(&entities.User{}); err != nil {
 		return err
 	}
+	if err := d.db.AutoMigrate(&entities.Project{}); err != nil {
+		return err
+	}
 	return nil
 }
