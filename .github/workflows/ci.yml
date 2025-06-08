@@ -20,9 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       frontend_changed: ${{ steps.filter.outputs.frontend }}
+<<<<<<< HEAD
       backend_changed: ${{ steps.filter.outputs.backend }} steps: - uses: actions/checkout@v4
 
 >>>>>>> bf59847 (chore: add ci)
+=======
+      backend_changed: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+>>>>>>> 8ad495e (fix: ci)
       - name: Check file changes
         id: filter
         uses: dorny/paths-filter@v3
