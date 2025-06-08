@@ -7,4 +7,6 @@ type User struct {
 	Username       string `gorm:"unique;not null"`
 	Email          string `gorm:"unique;not null"`
 	HashedPassword []byte `gorm:"not null"`
+	Projects       []Project
+	Model
 }
