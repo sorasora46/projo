@@ -11,7 +11,8 @@ Minimalist project tracker written with React.js + Go Fiber
     - [x] init usecase // 35:13
     - [x] create model // 31:17
     - [x] init repo // 39:28
-    - [ ] design project entity
+    - [x] design project entity + managing TODO in README.md // 55:00
+    - [x] modify + create project_tasks and projects // 01:12:00
  - [ ] setup github CI
     - [ ] create project
       - [ ] create branch
