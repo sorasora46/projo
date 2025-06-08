@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       frontend_changed: ${{ steps.filter.outputs.frontend }}
-      backend_changed: ${{ steps.filter.outputs.backend }} steps: - uses: actions/checkout@v4
-
+      backend_changed: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
       - name: Check file changes
         id: filter
         uses: dorny/paths-filter@v3
