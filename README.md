@@ -4,6 +4,7 @@ Minimalist project tracker written with React.js + Go Fiber
 ### TODO [frontend]
  - [ ] create login page
  - [ ] create home page
+ - [ ] create user profile page
 ### TODO [backend]
  - [ ] create CRUD project endpoint
  - [ ] refactor response objs
