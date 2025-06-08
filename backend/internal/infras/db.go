@@ -43,9 +43,15 @@ func (d *GormDatabase) GetDBInstance() (*gorm.DB, error) {
 
 func (d *GormDatabase) migrateSchemas() error {
 	if err := d.db.AutoMigrate(&entities.User{}); err != nil {
+		log.Fatal("error migrating user entity")
 		return err
 	}
 	if err := d.db.AutoMigrate(&entities.Project{}); err != nil {
+		log.Fatal("error migrating project entity")
+		return err
+	}
+	if err := d.db.AutoMigrate(&entities.ProjectTask{}); err != nil {
+		log.Fatal("error migrating project_task entity")
 		return err
 	}
 	return nil
