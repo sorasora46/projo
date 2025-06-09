@@ -10,11 +10,15 @@ type ProjectRepositoryImpl struct {
 	db *gorm.DB
 }
 
-func NewProjectRepository() interfaces.ProjectRepository {
-	return &ProjectRepositoryImpl{}
+func NewProjectRepository(db *gorm.DB) interfaces.ProjectRepository {
+	return &ProjectRepositoryImpl{db: db}
 }
 
-func (p *ProjectRepositoryImpl) Create(newProject entities.Project) error {
+func (p *ProjectRepositoryImpl) Create(newProject *entities.Project) error {
+	transaction := p.db.Create(newProject)
+	if transaction.Error != nil {
+		return transaction.Error
+	}
 	return nil
 }
 
