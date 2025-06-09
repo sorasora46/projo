@@ -3,6 +3,7 @@ package usecases_test
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/sorasora46/projo/backend/internal/dtos"
@@ -61,5 +62,57 @@ func TestCreateProject(t *testing.T) {
 		// Assert
 		assert.Error(t, err)
 		assert.Equal(t, "db error", err.Error())
+	})
+}
+
+func TestGetByProjectId(t *testing.T) {
+	t.Run("successfully get project by projectId", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		userId := uuid.NewString()
+		now := time.Now()
+		expectedProject := &entities.Project{
+			Id:          projectId,
+			Name:        "project name",
+			Description: "project description",
+			UserId:      userId,
+			Model: entities.Model{
+				CreatedAt: now,
+				UpdatedAt: now,
+			},
+		}
+
+		mockRepo := new(mocks.MockProjectRepository)
+
+		mockRepo.On("GetByProjectId", mock.AnythingOfType("string")).Return(expectedProject, nil)
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		project, err := service.GetByProjectId(projectId)
+
+		// Assert
+		assert.NoError(t, err)
+		assert.Equal(t, expectedProject, project)
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.GetByProjectId fails", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+
+		mockRepo := new(mocks.MockProjectRepository)
+
+		mockRepo.On("GetByProjectId", mock.AnythingOfType("string")).Return(nil, errors.New("db error"))
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		project, err := service.GetByProjectId(projectId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Nil(t, project)
+		mockRepo.AssertExpectations(t)
 	})
 }
