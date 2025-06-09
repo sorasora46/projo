@@ -36,5 +36,14 @@ func (p *ProjectHandlerImpl) CreateProject(c *fiber.Ctx) error {
 }
 
 func (p *ProjectHandlerImpl) GetByProjectId(c *fiber.Ctx) error {
-	return nil
+	projectId := c.Params("projectId")
+	project, err := p.usecase.GetByProjectId(projectId)
+	if err != nil {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+	return c.Status(200).JSON(dtos.CommonRes{
+		Result: project,
+	})
 }
