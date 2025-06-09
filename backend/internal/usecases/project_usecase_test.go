@@ -24,7 +24,7 @@ func TestCreateProject(t *testing.T) {
 
 		mockRepo := new(mocks.MockProjectRepository)
 
-		mockRepo.On("Create", mock.MatchedBy(func(p entities.Project) bool {
+		mockRepo.On("Create", mock.MatchedBy(func(p *entities.Project) bool {
 			return p.Name == createRequest.Name &&
 				p.Description == createRequest.Description &&
 				p.Id != "" &&
