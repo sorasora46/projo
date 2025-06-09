@@ -5,6 +5,7 @@ Minimalist project tracker written with React.js + Go Fiber
  - [ ] create login page
  - [ ] create home page
 ### TODO [backend]
+ - [ ] fix unit test of user endpoint
  - [ ] create CRUD project endpoint
     - [x] init route/endpoint // 16:28
     - [x] init http handler // 16:28
@@ -14,11 +15,12 @@ Minimalist project tracker written with React.js + Go Fiber
     - [x] design project entity + managing TODO in README.md // 55:00
     - [x] modify + create project_tasks and projects // 01:12:00
  - [x] setup github CI // 1:50:20
-    - [ ] create project
-      - [ ] create branch
-      - [ ] unit test for usecase
-      - [ ] http handler
-      - [ ] repo
+    - [x] create project // 1:00:00
+      - [x] create branch
+      - [x] unit test for usecase
+      - [x] implement usecase
+      - [x] http handler
+      - [x] repo
     - [ ] get project by id
       - [ ] create branch
       - [ ] unit test for usecase
