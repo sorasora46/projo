@@ -31,7 +31,7 @@ func (u *UserService) CreateUser(req dtos.CreateUserReq) error {
 	if err != nil {
 		return err
 	}
-	newUser := entities.User{
+	newUser := &entities.User{
 		Id:             uuid.NewString(),
 		FirstName:      req.FirstName,
 		LastName:       req.LastName,

@@ -14,7 +14,7 @@ func NewUserRepository(db *gorm.DB) interfaces.UserRepository {
 	return &UserRepositoryImpl{db: db}
 }
 
-func (u *UserRepositoryImpl) Create(user entities.User) error {
+func (u *UserRepositoryImpl) Create(user *entities.User) error {
 	transaction := u.db.Create(user)
 	if transaction.Error != nil {
 		return transaction.Error
