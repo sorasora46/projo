@@ -3,13 +3,13 @@ package mocks
 import "github.com/sorasora46/projo/backend/internal/entities"
 
 type MockUserRepository struct {
-	CreateFunc                      func(user entities.User) error
+	CreateFunc                      func(user *entities.User) error
 	GetByUsernameFunc               func(username string) (*entities.User, error)
 	DeleteByUsernameFunc            func(username string) error
 	GetHashedPasswordByUsernameFunc func(username string) ([]byte, error)
 }
 
-func (m *MockUserRepository) Create(user entities.User) error {
+func (m *MockUserRepository) Create(user *entities.User) error {
 	if m.CreateFunc != nil {
 		return m.CreateFunc(user)
 	}
