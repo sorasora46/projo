@@ -34,5 +34,9 @@ func (p *ProjectService) CreateProject(req dtos.CreateProjectReq, userId string)
 }
 
 func (p *ProjectService) GetByProjectId(projectId string) (*entities.Project, error) {
-	return nil, nil
+	project, err := p.repo.GetByProjectId(projectId)
+	if err != nil {
+		return nil, err
+	}
+	return project, nil
 }
