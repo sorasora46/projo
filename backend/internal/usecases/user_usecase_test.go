@@ -16,7 +16,7 @@ import (
 func TestCreateUser(t *testing.T) {
 	t.Run("successfully creates a user", func(t *testing.T) {
 		mockRepo := &mocks.MockUserRepository{
-			CreateFunc: func(user entities.User) error {
+			CreateFunc: func(user *entities.User) error {
 				assert.Equal(t, "john_doe", user.Username)
 				assert.Equal(t, "John", user.FirstName)
 				assert.Equal(t, "Doe", user.LastName)
@@ -43,7 +43,7 @@ func TestCreateUser(t *testing.T) {
 
 	t.Run("returns error if repo.Create fails", func(t *testing.T) {
 		mockRepo := &mocks.MockUserRepository{
-			CreateFunc: func(user entities.User) error {
+			CreateFunc: func(user *entities.User) error {
 				return errors.New("repo failure")
 			},
 		}
