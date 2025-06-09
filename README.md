@@ -21,7 +21,7 @@ Minimalist project tracker written with React.js + Go Fiber
       - [x] implement usecase
       - [x] http handler
       - [x] repo
-    - [x] get project by id
+    - [x] get project by id // 2:00:00
       - [x] create branch
       - [x] unit test for usecase
       - [x] http handler
