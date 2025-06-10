@@ -40,3 +40,12 @@ func (p *ProjectRepositoryImpl) GetAllProjects(userId string) ([]entities.Projec
 
 	return projects, nil
 }
+
+func (p *ProjectRepositoryImpl) DeleteByProjectId(projectId string) error {
+	project := &entities.Project{Id: projectId}
+	transaction := p.db.Delete(project)
+	if transaction.Error != nil {
+		return transaction.Error
+	}
+	return nil
+}
