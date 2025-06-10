@@ -115,7 +115,9 @@ func TestGetByProjectId(t *testing.T) {
 		assert.Nil(t, project)
 		mockRepo.AssertExpectations(t)
 	})
+}
 
+func TestGetAllProjects(t *testing.T) {
 	t.Run("successfully get all projects", func(t *testing.T) {
 		// Arrange
 		userId := uuid.NewString()
@@ -156,10 +158,42 @@ func TestGetByProjectId(t *testing.T) {
 
 		// Act
 		projects, err := service.GetAllProjects(userId)
-
 		// Assert
 		assert.Error(t, err)
 		assert.Nil(t, projects)
+		assert.Equal(t, "db failure", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
+}
+
+func TestDeleteByProjectId(t *testing.T) {
+	t.Run("successfully delete project by Id", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("DeleteByProjectId", mock.AnythingOfType("string")).Return(nil)
+
+		service := usecases.NewProjectUsecase(mockRepo)
+		// Act
+		err := service.DeleteByProjectId(projectId)
+
+		// Assert
+		assert.NoError(t, err)
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.DeleteByProjectId fails", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("DeleteByProjectId", mock.AnythingOfType("string")).Return(errors.New("db failure"))
+
+		service := usecases.NewProjectUsecase(mockRepo)
+		// Act
+		err := service.DeleteByProjectId(projectId)
+
+		// Assert
+		assert.Error(t, err)
 		assert.Equal(t, "db failure", err.Error())
 		mockRepo.AssertExpectations(t)
 	})
