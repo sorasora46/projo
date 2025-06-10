@@ -21,3 +21,11 @@ func (m *MockProjectRepository) GetByProjectId(projectId string) (*entities.Proj
 	}
 	return nil, args.Error(1)
 }
+
+func (m *MockProjectRepository) GetAllProjects(userId string) ([]entities.Project, error) {
+	args := m.Called(userId)
+	if projects := args.Get(0); projects != nil {
+		return projects.([]entities.Project), args.Error(1)
+	}
+	return nil, args.Error(1)
+}
