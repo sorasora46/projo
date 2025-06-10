@@ -115,4 +115,52 @@ func TestGetByProjectId(t *testing.T) {
 		assert.Nil(t, project)
 		mockRepo.AssertExpectations(t)
 	})
+
+	t.Run("successfully get all projects", func(t *testing.T) {
+		// Arrange
+		userId := uuid.NewString()
+		projectId := uuid.NewString()
+		expectedRes := []entities.Project{
+			{
+				UserId:      userId,
+				Id:          projectId,
+				Name:        "project 1",
+				Description: "description 1",
+			},
+		}
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("GetAllProjects", mock.AnythingOfType("string")).Return(expectedRes, nil)
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		projects, err := service.GetAllProjects(userId)
+
+		// Assert
+		assert.NoError(t, err)
+		assert.Equal(t, len(expectedRes), len(projects))
+		assert.Equal(t, expectedRes[0].Id, projects[0].Id)
+		assert.Equal(t, expectedRes[0].Name, projects[0].Name)
+		assert.Equal(t, expectedRes[0].Description, projects[0].Description)
+		assert.Equal(t, expectedRes[0].UserId, projects[0].UserId)
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.GetAllProjects fails", func(t *testing.T) {
+		// Arrange
+		userId := uuid.NewString()
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("GetAllProjects", mock.AnythingOfType("string")).Return(nil, errors.New("db failure"))
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		projects, err := service.GetAllProjects(userId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Nil(t, projects)
+		assert.Equal(t, "db failure", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
 }
