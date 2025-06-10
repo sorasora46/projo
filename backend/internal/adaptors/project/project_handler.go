@@ -9,6 +9,7 @@ import (
 type ProjectHandler interface {
 	CreateProject(c *fiber.Ctx) error
 	GetByProjectId(c *fiber.Ctx) error
+	GetAllProjects(c *fiber.Ctx) error
 }
 
 type ProjectHandlerImpl struct {
@@ -46,4 +47,8 @@ func (p *ProjectHandlerImpl) GetByProjectId(c *fiber.Ctx) error {
 	return c.Status(200).JSON(dtos.CommonRes{
 		Result: project,
 	})
+}
+
+func (p *ProjectHandlerImpl) GetAllProjects(c *fiber.Ctx) error {
+	return nil
 }
