@@ -28,8 +28,13 @@ func (p *ProjectHandlerImpl) CreateProject(c *fiber.Ctx) error {
 			Result: err.Error(),
 		})
 	}
-	// TODO: get userId from JWT
-	if err := p.usecase.CreateProject(req, "userId"); err != nil {
+	userId, ok := c.Locals("userId").(string)
+	if !ok {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: "error converting userId in Locals",
+		})
+	}
+	if err := p.usecase.CreateProject(req, userId); err != nil {
 		return c.Status(500).JSON(dtos.CommonRes{
 			Result: err.Error(),
 		})
@@ -51,8 +56,13 @@ func (p *ProjectHandlerImpl) GetByProjectId(c *fiber.Ctx) error {
 }
 
 func (p *ProjectHandlerImpl) GetAllProjects(c *fiber.Ctx) error {
-	// TODO: get userId from JWT
-	projects, err := p.usecase.GetAllProjects("userId")
+	userId, ok := c.Locals("userId").(string)
+	if !ok {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: "error converting userId in Locals",
+		})
+	}
+	projects, err := p.usecase.GetAllProjects(userId)
 	if err != nil {
 		return c.Status(500).JSON(dtos.CommonRes{
 			Result: err.Error(),

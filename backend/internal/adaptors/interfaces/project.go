@@ -7,4 +7,5 @@ type ProjectRepository interface {
 	GetByProjectId(projectId string) (*entities.Project, error)
 	GetAllProjects(userId string) ([]entities.Project, error)
 	DeleteByProjectId(projectId string) error
+	CheckIfProjectExistById(projectId string) (bool, error)
 }
