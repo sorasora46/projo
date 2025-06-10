@@ -50,5 +50,14 @@ func (p *ProjectHandlerImpl) GetByProjectId(c *fiber.Ctx) error {
 }
 
 func (p *ProjectHandlerImpl) GetAllProjects(c *fiber.Ctx) error {
-	return nil
+	// TODO: get userId from JWT
+	projects, err := p.usecase.GetAllProjects("userId")
+	if err != nil {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+	return c.Status(200).JSON(dtos.CommonRes{
+		Result: projects,
+	})
 }
