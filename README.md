@@ -26,11 +26,11 @@ Minimalist project tracker written with React.js + Go Fiber
       - [x] unit test for usecase
       - [x] http handler
       - [x] repo
-    - [ ] get all projects
-      - [ ] create branch
-      - [ ] unit test for usecase
-      - [ ] http handler
-      - [ ] repo
+    - [x] get all projects // 25:00
+      - [x] create branch
+      - [x] unit test for usecase
+      - [x] http handler
+      - [x] repo
     - [ ] update project
       - [ ] create branch
       - [ ] unit test for usecase
