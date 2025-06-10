@@ -11,6 +11,7 @@ type ProjectUsecase interface {
 	CreateProject(req dtos.CreateProjectReq, userId string) error
 	GetByProjectId(projectId string) (*entities.Project, error)
 	GetAllProjects(userId string) ([]entities.Project, error)
+	DeleteByProjectId(projectId string) error
 }
 
 type ProjectService struct {
@@ -22,6 +23,7 @@ func NewProjectUsecase(repo interfaces.ProjectRepository) ProjectUsecase {
 }
 
 func (p *ProjectService) CreateProject(req dtos.CreateProjectReq, userId string) error {
+	// TODO: check if user exist in middleware
 	newProject := &entities.Project{
 		Id:          uuid.NewString(),
 		Name:        req.Name,
@@ -43,9 +45,18 @@ func (p *ProjectService) GetByProjectId(projectId string) (*entities.Project, er
 }
 
 func (p *ProjectService) GetAllProjects(userId string) ([]entities.Project, error) {
+	// TODO: check if user exist in middleware
 	projects, err := p.repo.GetAllProjects(userId)
 	if err != nil {
 		return nil, err
 	}
 	return projects, nil
+}
+
+func (p *ProjectService) DeleteByProjectId(projectId string) error {
+	// TODO: check if project exist
+	if err := p.repo.DeleteByProjectId(projectId); err != nil {
+		return err
+	}
+	return nil
 }
