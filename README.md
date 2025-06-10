@@ -36,7 +36,7 @@ Minimalist project tracker written with React.js + Go Fiber
       - [ ] unit test for usecase
       - [ ] http handler
       - [ ] repo
-    - [ ] delete project
+    - [x] delete project // 50:00
       - [x] create branch
       - [x] unit test for usecase
       - [x] http handler
