@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
@@ -70,14 +72,18 @@ func (u *UserService) DeleteByUsername(username string) error {
 }
 
 func (u *UserService) Login(username string, password string) (*string, error) {
-	hashedPassword, err := u.repo.GetHashedPasswordByUsername(username)
+	user, err := u.repo.GetLoginInfoByUsername(username)
 	if err != nil {
 		return nil, err
 	}
-	if err := bcrypt.CompareHashAndPassword(hashedPassword, []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword(user.HashedPassword, []byte(password)); err != nil {
 		return nil, err
 	}
-	token := jwt.New(jwt.SigningMethodHS384)
+	token := jwt.NewWithClaims(jwt.SigningMethodHS384, jwt.MapClaims{
+		"sub":      user.Id,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
+		"username": username,
+	})
 	signedToken, err := token.SignedString([]byte(u.envManager.GetJWTSignKey()))
 	if err != nil {
 		return nil, err
