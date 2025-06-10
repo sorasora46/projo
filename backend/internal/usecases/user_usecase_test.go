@@ -146,13 +146,23 @@ func TestLogin(t *testing.T) {
 			Username: "john_doe",
 			Password: password,
 		}
+		userId := uuid.NewString()
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		assert.NoError(t, err)
 
+		expectedUser := entities.User{
+			Id:             userId,
+			FirstName:      "John",
+			LastName:       "Doe",
+			Username:       "john_doe",
+			Email:          "john@example.com",
+			HashedPassword: hashedPassword,
+		}
+
 		mockEnvMngr := &mocks.MockEnvManager{}
 		mockRepo := &mocks.MockUserRepository{
-			GetHashedPasswordByUsernameFunc: func(username string) ([]byte, error) {
-				return hashedPassword, nil
+			GetLoginInfoByUsernameFunc: func(username string) (*entities.User, error) {
+				return &expectedUser, nil
 			},
 		}
 
@@ -164,7 +174,7 @@ func TestLogin(t *testing.T) {
 		assert.NotEmpty(t, *jwt)
 	})
 
-	t.Run("returns error when repo.GetHashedPasswordByUsername fails", func(t *testing.T) {
+	t.Run("returns error when repo.GetLoginInfoByUsername fails", func(t *testing.T) {
 		password := "very_strong_password"
 		req := dtos.LoginReq{
 			Username: "john_doe",
@@ -173,7 +183,7 @@ func TestLogin(t *testing.T) {
 
 		mockEnvMngr := &mocks.MockEnvManager{}
 		mockRepo := &mocks.MockUserRepository{
-			GetHashedPasswordByUsernameFunc: func(username string) ([]byte, error) {
+			GetLoginInfoByUsernameFunc: func(username string) (*entities.User, error) {
 				return nil, errors.New("repo failure")
 			},
 		}
@@ -189,6 +199,7 @@ func TestLogin(t *testing.T) {
 	t.Run("return errors when bcrypt.CompareHashAndPassword fails", func(t *testing.T) {
 		incorrectPassword := "incorrect_password"
 		password := "very_strong_password"
+		userId := uuid.NewString()
 		req := dtos.LoginReq{
 			Username: "john_doe",
 			Password: incorrectPassword,
@@ -196,10 +207,19 @@ func TestLogin(t *testing.T) {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		assert.NoError(t, err)
 
+		expectedUser := entities.User{
+			Id:             userId,
+			FirstName:      "John",
+			LastName:       "Doe",
+			Username:       "john_doe",
+			Email:          "john@example.com",
+			HashedPassword: hashedPassword,
+		}
+
 		mockEnvMngr := &mocks.MockEnvManager{}
 		mockRepo := &mocks.MockUserRepository{
-			GetHashedPasswordByUsernameFunc: func(username string) ([]byte, error) {
-				return hashedPassword, nil
+			GetLoginInfoByUsernameFunc: func(username string) (*entities.User, error) {
+				return &expectedUser, nil
 			},
 		}
 

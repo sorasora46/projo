@@ -1,12 +1,15 @@
 package mocks
 
-import "github.com/sorasora46/projo/backend/internal/entities"
+import (
+	"github.com/sorasora46/projo/backend/internal/entities"
+)
 
 type MockUserRepository struct {
 	CreateFunc                      func(user *entities.User) error
 	GetByUsernameFunc               func(username string) (*entities.User, error)
 	DeleteByUsernameFunc            func(username string) error
-	GetHashedPasswordByUsernameFunc func(username string) ([]byte, error)
+	GetLoginInfoByUsernameFunc      func(username string) (*entities.User, error)
+	CheckIfUserExistByUniqueKeyFunc func(uniqueKey string) (bool, error)
 }
 
 func (m *MockUserRepository) Create(user *entities.User) error {
@@ -30,9 +33,16 @@ func (m *MockUserRepository) DeleteByUsername(username string) error {
 	return nil
 }
 
-func (m *MockUserRepository) GetHashedPasswordByUsername(username string) ([]byte, error) {
-	if m.GetHashedPasswordByUsernameFunc != nil {
-		return m.GetHashedPasswordByUsernameFunc(username)
+func (m *MockUserRepository) GetLoginInfoByUsername(username string) (*entities.User, error) {
+	if m.GetLoginInfoByUsernameFunc != nil {
+		return m.GetLoginInfoByUsernameFunc(username)
 	}
 	return nil, nil
+}
+
+func (m *MockUserRepository) CheckIfUserExistByUniqueKey(uniqueKey string) (bool, error) {
+	if m.CheckIfUserExistByUniqueKeyFunc != nil {
+		return m.CheckIfUserExistByUniqueKeyFunc(uniqueKey)
+	}
+	return false, nil
 }

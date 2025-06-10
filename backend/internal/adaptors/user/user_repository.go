@@ -39,11 +39,17 @@ func (u *UserRepositoryImpl) DeleteByUsername(username string) error {
 	return nil
 }
 
-func (u *UserRepositoryImpl) GetHashedPasswordByUsername(username string) ([]byte, error) {
+func (u *UserRepositoryImpl) GetLoginInfoByUsername(username string) (*entities.User, error) {
 	var user entities.User
-	transaction := u.db.Select("hashed_password").Where("username = ?", username).First(&user)
+	transaction := u.db.Where("username = ?", username).First(&user)
 	if transaction.Error != nil {
 		return nil, transaction.Error
 	}
-	return user.HashedPassword, nil
+	return &user, nil
+}
+
+func (u *UserRepositoryImpl) CheckIfUserExistByUniqueKey(uniqueKey string) (bool, error) {
+	var count int64
+	u.db.Where("id = ?", uniqueKey).Or("username = ?", uniqueKey).Or("email = ?", uniqueKey).Find(&entities.User{}).Count(&count)
+	return count == 1, nil
 }

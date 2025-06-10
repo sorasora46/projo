@@ -14,7 +14,7 @@ Minimalist project tracker written with React.js + Go Fiber
     - [x] init repo // 39:28
     - [x] design project entity + managing TODO in README.md // 55:00
     - [x] modify + create project_tasks and projects // 01:12:00
- - [ ] setup userId in JWT and validate user before sending to next middleware
+ - [x] setup userId in JWT and validate user before sending to next middleware // 2:00:00
  - [x] setup github CI // 1:50:20
     - [x] create project // 1:00:00
       - [x] create branch
