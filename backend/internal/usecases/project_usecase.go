@@ -10,6 +10,7 @@ import (
 type ProjectUsecase interface {
 	CreateProject(req dtos.CreateProjectReq, userId string) error
 	GetByProjectId(projectId string) (*entities.Project, error)
+	GetAllProjects(userId string) ([]entities.Project, error)
 }
 
 type ProjectService struct {
@@ -39,4 +40,12 @@ func (p *ProjectService) GetByProjectId(projectId string) (*entities.Project, er
 		return nil, err
 	}
 	return project, nil
+}
+
+func (p *ProjectService) GetAllProjects(userId string) ([]entities.Project, error) {
+	projects, err := p.repo.GetAllProjects(userId)
+	if err != nil {
+		return nil, err
+	}
+	return projects, nil
 }

@@ -30,3 +30,13 @@ func (p *ProjectRepositoryImpl) GetByProjectId(projectId string) (*entities.Proj
 	}
 	return &project, nil
 }
+
+func (p *ProjectRepositoryImpl) GetAllProjects(userId string) ([]entities.Project, error) {
+	var projects []entities.Project
+	transaction := p.db.Where("user_id = ?", userId).Find(&projects)
+	if transaction.Error != nil {
+		return nil, transaction.Error
+	}
+
+	return projects, nil
+}
