@@ -29,3 +29,8 @@ func (m *MockProjectRepository) GetAllProjects(userId string) ([]entities.Projec
 	}
 	return nil, args.Error(1)
 }
+
+func (m *MockProjectRepository) DeleteByProjectId(projectId string) error {
+	args := m.Called(projectId)
+	return args.Error(0)
+}

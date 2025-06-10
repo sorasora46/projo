@@ -10,6 +10,7 @@ type ProjectHandler interface {
 	CreateProject(c *fiber.Ctx) error
 	GetByProjectId(c *fiber.Ctx) error
 	GetAllProjects(c *fiber.Ctx) error
+	DeleteByProjectId(c *fiber.Ctx) error
 }
 
 type ProjectHandlerImpl struct {
@@ -60,4 +61,15 @@ func (p *ProjectHandlerImpl) GetAllProjects(c *fiber.Ctx) error {
 	return c.Status(200).JSON(dtos.CommonRes{
 		Result: projects,
 	})
+}
+
+func (p *ProjectHandlerImpl) DeleteByProjectId(c *fiber.Ctx) error {
+	projectId := c.Params("projectId")
+	err := p.usecase.DeleteByProjectId(projectId)
+	if err != nil {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+	return c.Status(204).JSON(dtos.CommonRes{})
 }
