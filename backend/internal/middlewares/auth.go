@@ -1,8 +1,11 @@
 package middlewares
 
 import (
+	"errors"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
 	"github.com/sorasora46/projo/backend/internal/infras"
 )
@@ -13,10 +16,11 @@ type AuthMiddleware interface {
 
 type AuthMiddlewareImpl struct {
 	envManager infras.EnvManager
+	userRepo   interfaces.UserRepository
 }
 
-func NewAuthMiddleware(envManager infras.EnvManager) AuthMiddleware {
-	return &AuthMiddlewareImpl{envManager: envManager}
+func NewAuthMiddleware(envManager infras.EnvManager, userRepo interfaces.UserRepository) AuthMiddleware {
+	return &AuthMiddlewareImpl{envManager: envManager, userRepo: userRepo}
 }
 
 func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
@@ -40,13 +44,39 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 		return c.Status(401).JSON(dtos.CommonRes{})
 	}
 
-	_, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
+	var claims dtos.CustomClaim
+	_, err := jwt.ParseWithClaims(accessToken, &claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(a.envManager.GetJWTSignKey()), nil
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS384.Alg()}))
+
 	if err != nil {
 		return c.Status(401).JSON(dtos.CommonRes{
 			Result: err.Error(),
 		})
 	}
+
+	userId, err := claims.GetSubject()
+	username := claims.Username
+	if err != nil {
+		return c.Status(401).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+
+	isExist, err := a.userRepo.CheckIfUserExistByUniqueKey(username)
+	if err != nil {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+	if !isExist {
+		return c.Status(401).JSON(dtos.CommonRes{
+			Result: errors.New("user not exist"),
+		})
+	}
+
+	c.Locals("username", username)
+	c.Locals("userId", userId)
+
 	return c.Next()
 }
