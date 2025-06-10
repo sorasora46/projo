@@ -1,6 +1,8 @@
 package usecases
 
 import (
+	"errors"
+
 	"github.com/google/uuid"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
@@ -23,7 +25,6 @@ func NewProjectUsecase(repo interfaces.ProjectRepository) ProjectUsecase {
 }
 
 func (p *ProjectService) CreateProject(req dtos.CreateProjectReq, userId string) error {
-	// TODO: check if user exist in middleware
 	newProject := &entities.Project{
 		Id:          uuid.NewString(),
 		Name:        req.Name,
@@ -45,7 +46,6 @@ func (p *ProjectService) GetByProjectId(projectId string) (*entities.Project, er
 }
 
 func (p *ProjectService) GetAllProjects(userId string) ([]entities.Project, error) {
-	// TODO: check if user exist in middleware
 	projects, err := p.repo.GetAllProjects(userId)
 	if err != nil {
 		return nil, err
@@ -54,7 +54,13 @@ func (p *ProjectService) GetAllProjects(userId string) ([]entities.Project, erro
 }
 
 func (p *ProjectService) DeleteByProjectId(projectId string) error {
-	// TODO: check if project exist
+	isProjectExist, err := p.repo.CheckIfProjectExistById(projectId)
+	if err != nil {
+		return err
+	}
+	if !isProjectExist {
+		return errors.New("project not exist")
+	}
 	if err := p.repo.DeleteByProjectId(projectId); err != nil {
 		return err
 	}

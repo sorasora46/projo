@@ -49,3 +49,12 @@ func (p *ProjectRepositoryImpl) DeleteByProjectId(projectId string) error {
 	}
 	return nil
 }
+
+func (p *ProjectRepositoryImpl) CheckIfProjectExistById(projectId string) (bool, error) {
+	var count int64
+	transaction := p.db.Where("id = ?", projectId).Find(&entities.Project{}).Count(&count)
+	if transaction.Error != nil {
+		return false, transaction.Error
+	}
+	return count == 1, nil
+}
