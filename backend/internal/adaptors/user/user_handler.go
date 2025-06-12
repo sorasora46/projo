@@ -25,29 +25,37 @@ func NewUserHandler(usecase usecases.UserUsecase) UserHandler {
 func (u *UserHandlerImpl) CreateUser(c *fiber.Ctx) error {
 	var req dtos.CreateUserReq
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(dtos.CommonRes{
-			Result: err.Error(),
-		})
-	}
-	if err := u.usecase.CreateUser(req); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusBadRequest,
+			Error: err,
 		})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(dtos.CommonRes{})
+	if err := u.usecase.CreateUser(req); err != nil {
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
+		})
+	}
+
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusCreated,
+		Result: nil,
+	})
 }
 
 func (u *UserHandlerImpl) GetByUsername(c *fiber.Ctx) error {
 	username := c.Params(constants.UsernameParam)
 	user, err := u.usecase.GetByUsername(username)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(dtos.CommonRes{
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusOK,
 		Result: user,
 	})
 }
@@ -56,25 +64,32 @@ func (u *UserHandlerImpl) DeleteByUsername(c *fiber.Ctx) error {
 	username := c.Params(constants.UsernameParam)
 	err := u.usecase.DeleteByUsername(username)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
 
-	return c.Status(fiber.StatusNoContent).JSON(dtos.CommonRes{})
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusNoContent,
+		Result: nil,
+	})
 }
 
 func (u *UserHandlerImpl) Login(c *fiber.Ctx) error {
 	var req dtos.LoginReq
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusBadRequest,
+			Error: err,
 		})
 	}
+
 	jwt, err := u.usecase.Login(req.Username, req.Password)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
 
@@ -87,5 +102,8 @@ func (u *UserHandlerImpl) Login(c *fiber.Ctx) error {
 	}
 	c.Cookie(cookie)
 
-	return c.Status(fiber.StatusOK).JSON(dtos.CommonRes{})
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusOK,
+		Result: nil,
+	})
 }

@@ -26,33 +26,44 @@ func NewProjectHandler(usecase usecases.ProjectUsecase) ProjectHandler {
 func (p *ProjectHandlerImpl) CreateProject(c *fiber.Ctx) error {
 	var req dtos.CreateProjectReq
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusBadRequest,
+			Error: err,
 		})
 	}
+
 	userId, ok := c.Locals(constants.UserIdContext).(string)
 	if !ok {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: "error converting userId in Locals",
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: fiber.NewError(fiber.StatusInternalServerError, constants.ErrConvertUserIdInContext),
 		})
 	}
+
 	if err := p.usecase.CreateProject(req, userId); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
-	return c.Status(fiber.StatusCreated).JSON(dtos.CommonRes{})
+
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusCreated,
+		Result: nil,
+	})
 }
 
 func (p *ProjectHandlerImpl) GetByProjectId(c *fiber.Ctx) error {
 	projectId := c.Params(constants.ProjectIdParam)
 	project, err := p.usecase.GetByProjectId(projectId)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(dtos.CommonRes{
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusOK,
 		Result: project,
 	})
 }
@@ -60,17 +71,22 @@ func (p *ProjectHandlerImpl) GetByProjectId(c *fiber.Ctx) error {
 func (p *ProjectHandlerImpl) GetAllProjects(c *fiber.Ctx) error {
 	userId, ok := c.Locals(constants.UserIdContext).(string)
 	if !ok {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: "error converting userId in Locals",
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: fiber.NewError(fiber.StatusInternalServerError, constants.ErrConvertUserIdInContext),
 		})
 	}
+
 	projects, err := p.usecase.GetAllProjects(userId)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(dtos.CommonRes{
+
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusOK,
 		Result: projects,
 	})
 }
@@ -79,25 +95,36 @@ func (p *ProjectHandlerImpl) DeleteByProjectId(c *fiber.Ctx) error {
 	projectId := c.Params(constants.ProjectIdParam)
 	err := p.usecase.DeleteByProjectId(projectId)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
-	return c.Status(fiber.StatusNoContent).JSON(dtos.CommonRes{})
+
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusNoContent,
+		Result: nil,
+	})
 }
 
 func (p *ProjectHandlerImpl) UpdateProject(c *fiber.Ctx) error {
 	projectId := c.Params(constants.ProjectIdParam)
 	var req dtos.UpdateProjectReq
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusBadRequest,
+			Error: err,
 		})
 	}
 	if err := p.usecase.UpdateProject(req, projectId); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
-	return c.Status(fiber.StatusOK).JSON(dtos.CommonRes{})
+
+	return dtos.NewSuccessRes(c, dtos.Response{
+		Code:   fiber.StatusOK,
+		Result: nil,
+	})
 }
