@@ -2,12 +2,9 @@ name: CI projo
 
 on:
   pull_request:
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual trigger from the Actions tab
 
 jobs:
-<<<<<<< HEAD
   check_file_changes:
     runs-on: ubuntu-latest
     outputs:
@@ -15,20 +12,6 @@ jobs:
       backend_changed: ${{ steps.filter.outputs.backend }}
     steps:
       - uses: actions/checkout@v4
-=======
- check_file_changes:
-    runs-on: ubuntu-latest
-    outputs:
-      frontend_changed: ${{ steps.filter.outputs.frontend }}
-<<<<<<< HEAD
-      backend_changed: ${{ steps.filter.outputs.backend }} steps: - uses: actions/checkout@v4
-
->>>>>>> bf59847 (chore: add ci)
-=======
-      backend_changed: ${{ steps.filter.outputs.backend }}
-    steps:
-      - uses: actions/checkout@v4
->>>>>>> 8ad495e (fix: ci)
       - name: Check file changes
         id: filter
         uses: dorny/paths-filter@v3
@@ -50,9 +33,9 @@ jobs:
           version: 9.6.0
       - uses: actions/setup-node@v4
         with:
-          cache-dependency-path: frontend/pnpm-lock.yaml
           node-version: "20"
           cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
       - name: Installing dependencies
         run: pnpm install
         working-directory: frontend
@@ -69,12 +52,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-<<<<<<< HEAD
           go-version: "1.23"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 200ffc4 (fix: go ci, add cache for go)
       - name: Cache Go modules
         uses: actions/cache@v4
         with:
@@ -84,28 +62,14 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-<<<<<<< HEAD
-=======
->>>>>>> 1a0be3e (fix: add indentation)
-=======
->>>>>>> 200ffc4 (fix: go ci, add cache for go)
-
       - name: Install Go dependencies
         run: go mod tidy
-=======
-          go-version: '1.23'
-
-      - name: Install Go dependencies
-        run: go mod download
->>>>>>> bf59847 (chore: add ci)
         working-directory: backend
-
       - name: Lint Go code
         run: |
           go install golang.org/x/lint/golint@latest
           golint ./...
         working-directory: backend
-
       - name: Run Go tests
         run: go test ./...
         working-directory: backend
