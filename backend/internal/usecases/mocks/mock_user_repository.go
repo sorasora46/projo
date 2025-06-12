@@ -2,47 +2,40 @@ package mocks
 
 import (
 	"github.com/sorasora46/projo/backend/internal/entities"
+	"github.com/stretchr/testify/mock"
 )
 
 type MockUserRepository struct {
-	CreateFunc                      func(user *entities.User) error
-	GetByUsernameFunc               func(username string) (*entities.User, error)
-	DeleteByUsernameFunc            func(username string) error
-	GetLoginInfoByUsernameFunc      func(username string) (*entities.User, error)
-	CheckIfUserExistByUniqueKeyFunc func(uniqueKey string) (bool, error)
+	mock.Mock
 }
 
 func (m *MockUserRepository) Create(user *entities.User) error {
-	if m.CreateFunc != nil {
-		return m.CreateFunc(user)
-	}
-	return nil
+	args := m.Called(user)
+	return args.Error(0)
 }
 
 func (m *MockUserRepository) GetByUsername(username string) (*entities.User, error) {
-	if m.GetByUsernameFunc != nil {
-		return m.GetByUsernameFunc(username)
+	args := m.Called(username)
+	if user := args.Get(0); user != nil {
+		return user.(*entities.User), nil
 	}
-	return nil, nil
+	return nil, args.Error(1)
 }
 
 func (m *MockUserRepository) DeleteByUsername(username string) error {
-	if m.DeleteByUsernameFunc != nil {
-		return m.DeleteByUsernameFunc(username)
-	}
-	return nil
+	args := m.Called(username)
+	return args.Error(0)
 }
 
 func (m *MockUserRepository) GetLoginInfoByUsername(username string) (*entities.User, error) {
-	if m.GetLoginInfoByUsernameFunc != nil {
-		return m.GetLoginInfoByUsernameFunc(username)
+	args := m.Called(username)
+	if user := args.Get(0); user != nil {
+		return user.(*entities.User), nil
 	}
-	return nil, nil
+	return nil, args.Error(1)
 }
 
 func (m *MockUserRepository) CheckIfUserExistByUniqueKey(uniqueKey string) (bool, error) {
-	if m.CheckIfUserExistByUniqueKeyFunc != nil {
-		return m.CheckIfUserExistByUniqueKeyFunc(uniqueKey)
-	}
-	return false, nil
+	args := m.Called(uniqueKey)
+	return args.Bool(0), args.Error(1)
 }

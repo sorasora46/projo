@@ -10,25 +10,13 @@ import (
 	"github.com/sorasora46/projo/backend/internal/usecases"
 	"github.com/sorasora46/projo/backend/internal/usecases/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func TestCreateUser(t *testing.T) {
 	t.Run("successfully creates a user", func(t *testing.T) {
-		mockRepo := &mocks.MockUserRepository{
-			CreateFunc: func(user *entities.User) error {
-				assert.Equal(t, "john_doe", user.Username)
-				assert.Equal(t, "John", user.FirstName)
-				assert.Equal(t, "Doe", user.LastName)
-				assert.Equal(t, "john@example.com", user.Email)
-				assert.NotEmpty(t, user.HashedPassword)
-				assert.NotEqual(t, "securePassword123", user.HashedPassword)
-				return nil
-			},
-		}
-
-		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
-
+		// Arrange
 		req := dtos.CreateUserReq{
 			FirstName: "John",
 			LastName:  "Doe",
@@ -36,31 +24,34 @@ func TestCreateUser(t *testing.T) {
 			Email:     "john@example.com",
 			Password:  "securePassword123",
 		}
-
-		err := userUsecase.CreateUser(req)
-		assert.NoError(t, err)
-	})
-
-	t.Run("returns error if repo.Create fails", func(t *testing.T) {
-		mockRepo := &mocks.MockUserRepository{
-			CreateFunc: func(user *entities.User) error {
-				return errors.New("repo failure")
-			},
-		}
+		mockRepo := new(mocks.MockUserRepository)
+		mockRepo.On("Create", mock.AnythingOfType("*entities.User")).Return(nil)
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
 
+		err := userUsecase.CreateUser(req)
+		assert.NoError(t, err)
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error if repo.Create fails", func(t *testing.T) {
+		// Arrange
 		req := dtos.CreateUserReq{
-			FirstName: "Jane",
-			LastName:  "Smith",
-			Username:  "jane_smith",
-			Email:     "jane@example.com",
-			Password:  "anotherPassword456",
+			FirstName: "John",
+			LastName:  "Doe",
+			Username:  "john_doe",
+			Email:     "john@example.com",
+			Password:  "securePassword123",
 		}
+		mockRepo := new(mocks.MockUserRepository)
+		mockRepo.On("Create", mock.AnythingOfType("*entities.User")).Return(errors.New("db failure"))
+
+		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
 
 		err := userUsecase.CreateUser(req)
 		assert.Error(t, err)
-		assert.Equal(t, "repo failure", err.Error())
+		assert.Equal(t, "db failure", err.Error())
+		mockRepo.AssertExpectations(t)
 	})
 }
 
@@ -68,37 +59,34 @@ func TestGetByUsername(t *testing.T) {
 	t.Run("successfully get a user by username", func(t *testing.T) {
 		id := uuid.NewString()
 		username := "john_doe"
-		mockRepo := &mocks.MockUserRepository{
-			GetByUsernameFunc: func(username string) (*entities.User, error) {
-				return &entities.User{
-					Id:             id,
-					FirstName:      "John",
-					LastName:       "Doe",
-					Username:       "john_doe",
-					Email:          "john@example.com",
-					HashedPassword: []byte{},
-				}, nil
-			},
+		expectedUser := &entities.User{
+			Id:             id,
+			FirstName:      "John",
+			LastName:       "Doe",
+			Username:       "john_doe",
+			Email:          "john@example.com",
+			HashedPassword: []byte{},
 		}
+
+		mockRepo := new(mocks.MockUserRepository)
+		mockRepo.On("GetByUsername", username).Return(expectedUser, nil)
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
 
 		dto, err := userUsecase.GetByUsername(username)
-		assert.Equal(t, "John", dto.FirstName)
-		assert.Equal(t, "Doe", dto.LastName)
-		assert.Equal(t, username, dto.Username)
-		assert.Equal(t, "john@example.com", dto.Email)
 		assert.NoError(t, err)
+		assert.Equal(t, expectedUser.FirstName, dto.FirstName)
+		assert.Equal(t, expectedUser.LastName, dto.LastName)
+		assert.Equal(t, expectedUser.Username, dto.Username)
+		assert.Equal(t, expectedUser.Email, dto.Email)
+
+		mockRepo.AssertExpectations(t)
 	})
 
 	t.Run("returns error if repo.GetByUsername fails", func(t *testing.T) {
 		username := "john_doe"
-		mockRepo := &mocks.MockUserRepository{
-			GetByUsernameFunc: func(username string) (*entities.User, error) {
-
-				return nil, errors.New("repo failure")
-			},
-		}
+		mockRepo := new(mocks.MockUserRepository)
+		mockRepo.On("GetByUsername", username).Return(nil, errors.New("repo failure"))
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
 
@@ -106,36 +94,38 @@ func TestGetByUsername(t *testing.T) {
 		assert.Nil(t, dto)
 		assert.Error(t, err)
 		assert.Equal(t, "repo failure", err.Error())
+
+		mockRepo.AssertExpectations(t)
 	})
 }
 
 func TestDeleteByUsername(t *testing.T) {
 	t.Run("successfully delete a user by username", func(t *testing.T) {
 		username := "john_doe"
-		mockRepo := &mocks.MockUserRepository{
-			DeleteByUsernameFunc: func(username string) error {
-				return nil
-			},
-		}
+
+		mockRepo := new(mocks.MockUserRepository)
+		mockRepo.On("DeleteByUsername", username).Return(nil)
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
 
 		err := userUsecase.DeleteByUsername(username)
-		assert.Nil(t, err)
+		assert.NoError(t, err)
+
+		mockRepo.AssertExpectations(t)
 	})
 
 	t.Run("returns error if repo.DeleteByUsername fails", func(t *testing.T) {
 		username := "john_doe"
-		mockRepo := &mocks.MockUserRepository{
-			DeleteByUsernameFunc: func(username string) error {
-				return errors.New("repo failure")
-			},
-		}
+
+		mockRepo := new(mocks.MockUserRepository)
+		mockRepo.On("DeleteByUsername", username).Return(errors.New("repo failure"))
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, nil)
 		err := userUsecase.DeleteByUsername(username)
 		assert.Error(t, err)
 		assert.Equal(t, "repo failure", err.Error())
+
+		mockRepo.AssertExpectations(t)
 	})
 }
 
@@ -150,7 +140,7 @@ func TestLogin(t *testing.T) {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		assert.NoError(t, err)
 
-		expectedUser := entities.User{
+		expectedUser := &entities.User{
 			Id:             userId,
 			FirstName:      "John",
 			LastName:       "Doe",
@@ -159,47 +149,44 @@ func TestLogin(t *testing.T) {
 			HashedPassword: hashedPassword,
 		}
 
-		mockEnvMngr := &mocks.MockEnvManager{}
-		mockRepo := &mocks.MockUserRepository{
-			GetLoginInfoByUsernameFunc: func(username string) (*entities.User, error) {
-				return &expectedUser, nil
-			},
-		}
+		mockRepo := new(mocks.MockUserRepository)
+		mockEnvMngr := new(mocks.MockEnvManager)
+		mockRepo.On("GetLoginInfoByUsername", req.Username).Return(expectedUser, nil)
 
+		// Assume that the Login method generates a non-empty JWT.
 		userUsecase := usecases.NewUserUsercase(mockRepo, mockEnvMngr)
-
 		jwt, err := userUsecase.Login(req.Username, req.Password)
+
 		assert.NoError(t, err)
 		assert.NotNil(t, jwt)
 		assert.NotEmpty(t, *jwt)
+
+		mockRepo.AssertExpectations(t)
 	})
 
 	t.Run("returns error when repo.GetLoginInfoByUsername fails", func(t *testing.T) {
-		password := "very_strong_password"
 		req := dtos.LoginReq{
 			Username: "john_doe",
-			Password: password,
+			Password: "password",
 		}
 
-		mockEnvMngr := &mocks.MockEnvManager{}
-		mockRepo := &mocks.MockUserRepository{
-			GetLoginInfoByUsernameFunc: func(username string) (*entities.User, error) {
-				return nil, errors.New("repo failure")
-			},
-		}
+		mockRepo := new(mocks.MockUserRepository)
+		mockEnvMngr := new(mocks.MockEnvManager)
+		mockRepo.On("GetLoginInfoByUsername", req.Username).Return(nil, errors.New("repo failure"))
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, mockEnvMngr)
-
 		jwt, err := userUsecase.Login(req.Username, req.Password)
+
 		assert.Error(t, err)
-		assert.Equal(t, "repo failure", err.Error())
 		assert.Nil(t, jwt)
+		assert.Equal(t, "repo failure", err.Error())
+
+		mockRepo.AssertExpectations(t)
 	})
 
-	t.Run("return errors when bcrypt.CompareHashAndPassword fails", func(t *testing.T) {
-		incorrectPassword := "incorrect_password"
-		password := "very_strong_password"
-		userId := uuid.NewString()
+	t.Run("returns error when bcrypt.CompareHashAndPassword fails", func(t *testing.T) {
+		password := "correct_password"
+		incorrectPassword := "wrong_password"
 		req := dtos.LoginReq{
 			Username: "john_doe",
 			Password: incorrectPassword,
@@ -207,8 +194,8 @@ func TestLogin(t *testing.T) {
 		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		assert.NoError(t, err)
 
-		expectedUser := entities.User{
-			Id:             userId,
+		expectedUser := &entities.User{
+			Id:             uuid.NewString(),
 			FirstName:      "John",
 			LastName:       "Doe",
 			Username:       "john_doe",
@@ -216,17 +203,16 @@ func TestLogin(t *testing.T) {
 			HashedPassword: hashedPassword,
 		}
 
-		mockEnvMngr := &mocks.MockEnvManager{}
-		mockRepo := &mocks.MockUserRepository{
-			GetLoginInfoByUsernameFunc: func(username string) (*entities.User, error) {
-				return &expectedUser, nil
-			},
-		}
+		mockRepo := new(mocks.MockUserRepository)
+		mockEnvMngr := new(mocks.MockEnvManager)
+		mockRepo.On("GetLoginInfoByUsername", req.Username).Return(expectedUser, nil)
 
 		userUsecase := usecases.NewUserUsercase(mockRepo, mockEnvMngr)
-
 		jwt, err := userUsecase.Login(req.Username, req.Password)
+
 		assert.Error(t, err)
 		assert.Nil(t, jwt)
+
+		mockRepo.AssertExpectations(t)
 	})
 }
