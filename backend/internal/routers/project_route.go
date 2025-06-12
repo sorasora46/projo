@@ -23,4 +23,5 @@ func NewProjectRoutes(api fiber.Router, database infras.Database, envManager inf
 	api.Get("/:projectId", projectHandlers.GetByProjectId)
 	api.Get("/", projectHandlers.GetAllProjects)
 	api.Delete("/:projectId", projectHandlers.DeleteByProjectId)
+	api.Patch("/:projectId", projectHandlers.UpdateProject)
 }
