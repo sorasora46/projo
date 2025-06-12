@@ -5,13 +5,13 @@ Minimalist project tracker written with React.js + Go Fiber
  - [ ] create login page
  - [ ] create home page
 ### TODO [backend]
- - [x] change http method name to constant
- - [x] change http status to constant
  - [ ] refactor response objs
  - [ ] refactor error handling
  - [ ] validate all request dtos
  - [ ] fix unit test of user endpoint
  - [ ] create SIT for user endpoint
+ - [x] change http method name to constant
+ - [x] change http status to constant
  - [x] setup userId in JWT and validate user before sending to next middleware
  - [x] setup github CI
  - [x] create CRUD project endpoint
