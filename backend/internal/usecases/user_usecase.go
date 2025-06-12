@@ -5,10 +5,10 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/sorasora46/projo/backend/config"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
 	"github.com/sorasora46/projo/backend/internal/entities"
-	"github.com/sorasora46/projo/backend/internal/infras"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -20,11 +20,11 @@ type UserUsecase interface {
 }
 
 type UserService struct {
-	envManager infras.EnvManager
+	envManager config.EnvManager
 	repo       interfaces.UserRepository
 }
 
-func NewUserUsercase(repo interfaces.UserRepository, envManager infras.EnvManager) UserUsecase {
+func NewUserUsercase(repo interfaces.UserRepository, envManager config.EnvManager) UserUsecase {
 	return &UserService{repo: repo, envManager: envManager}
 }
 

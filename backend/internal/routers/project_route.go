@@ -4,12 +4,12 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/sorasora46/projo/backend/config"
 	"github.com/sorasora46/projo/backend/internal/adaptors/project"
-	"github.com/sorasora46/projo/backend/internal/infras"
 	"github.com/sorasora46/projo/backend/internal/usecases"
 )
 
-func NewProjectRoutes(api fiber.Router, database infras.Database, envManager infras.EnvManager) {
+func NewProjectRoutes(api fiber.Router, database config.Database, envManager config.EnvManager) {
 	db, err := database.GetDBInstance()
 	if err != nil {
 		log.Printf("[NewProjectRoutes]: %v", err)
