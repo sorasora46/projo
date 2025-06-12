@@ -1,8 +1,6 @@
 package middlewares
 
 import (
-	"errors"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/sorasora46/projo/backend/config"
@@ -42,7 +40,11 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 
 	accessToken := c.Cookies(constants.AuthCookieName)
 	if accessToken == "" {
-		return c.Status(fiber.StatusUnauthorized).JSON(dtos.CommonRes{})
+		err := fiber.NewError(fiber.StatusUnauthorized, constants.ErrMissingAccessToken)
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusUnauthorized,
+			Error: err,
+		})
 	}
 
 	var claims dtos.CustomClaim
@@ -51,28 +53,33 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS384.Alg()}))
 
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusUnauthorized,
+			Error: err,
 		})
 	}
 
 	userId, err := claims.GetSubject()
-	username := claims.Username
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusUnauthorized,
+			Error: err,
 		})
 	}
+	username := claims.Username
 
 	isExist, err := a.userRepo.CheckIfUserExistByUniqueKey(username)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(dtos.CommonRes{
-			Result: err.Error(),
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusInternalServerError,
+			Error: err,
 		})
 	}
 	if !isExist {
-		return c.Status(fiber.StatusUnauthorized).JSON(dtos.CommonRes{
-			Result: errors.New("user not exist"),
+		err := fiber.NewError(fiber.StatusUnauthorized, constants.ErrUserNotExist)
+		return dtos.NewFailRes(c, dtos.Response{
+			Code:  fiber.StatusUnauthorized,
+			Error: err,
 		})
 	}
 
