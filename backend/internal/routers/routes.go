@@ -4,12 +4,12 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/sorasora46/projo/backend/config"
 	"github.com/sorasora46/projo/backend/internal/adaptors/user"
-	"github.com/sorasora46/projo/backend/internal/infras"
 	"github.com/sorasora46/projo/backend/internal/middlewares"
 )
 
-func InitRoutes(app *fiber.App, database infras.Database, envManager infras.EnvManager) {
+func InitRoutes(app *fiber.App, database config.Database, envManager config.EnvManager) {
 	db, err := database.GetDBInstance()
 	if err != nil {
 		log.Fatalf("[InitRoutes]: %v", err)
