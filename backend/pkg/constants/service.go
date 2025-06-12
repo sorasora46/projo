@@ -2,8 +2,11 @@ package constants
 
 // JWT and Credential Constants
 const (
-	JwtMaxAge     = 24 * 60 * 60
-	JwtCookieName = "accessToken"
+	AuthCookieMaxAge = OneDayInHour * OneHourInMinute * OneMinuteInSecond
+	AuthCookieName   = "accessToken"
+	JwtSubClaim      = "sub"
+	JwtExpClaim      = "exp"
+	JwtUsernameClaim = "username"
 )
 
 // Path and Param Constant
@@ -22,4 +25,11 @@ func GetSkipValidatePath() []string {
 const (
 	UsernameContext = "username"
 	UserIdContext   = "userId"
+)
+
+// Date and Time Constant
+const (
+	OneDayInHour      = 24
+	OneHourInMinute   = 60
+	OneMinuteInSecond = 60
 )

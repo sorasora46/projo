@@ -1,14 +1,14 @@
 package usecases
 
 import (
-	"time"
-
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/sorasora46/projo/backend/config"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
 	"github.com/sorasora46/projo/backend/internal/entities"
+	"github.com/sorasora46/projo/backend/pkg/constants"
+	"github.com/sorasora46/projo/backend/pkg/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -80,9 +80,9 @@ func (u *UserService) Login(username string, password string) (*string, error) {
 		return nil, err
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS384, jwt.MapClaims{
-		"sub":      user.Id,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
-		"username": username,
+		constants.JwtSubClaim:      user.Id,
+		constants.JwtExpClaim:      utils.GetEpochXHoursFromNow(constants.OneDayInHour),
+		constants.JwtUsernameClaim: username,
 	})
 	signedToken, err := token.SignedString([]byte(u.envManager.GetJWTSignKey()))
 	if err != nil {

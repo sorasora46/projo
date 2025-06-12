@@ -40,8 +40,8 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 		}
 	}
 
-	accessToken := c.Cookies(constants.JwtCookieName)
-	if len(accessToken) == 0 {
+	accessToken := c.Cookies(constants.AuthCookieName)
+	if accessToken == "" {
 		return c.Status(fiber.StatusUnauthorized).JSON(dtos.CommonRes{})
 	}
 
