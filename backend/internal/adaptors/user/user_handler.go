@@ -79,9 +79,9 @@ func (u *UserHandlerImpl) Login(c *fiber.Ctx) error {
 	}
 
 	cookie := &fiber.Cookie{
-		Name:     constants.JwtCookieName,
+		Name:     constants.AuthCookieName,
 		Value:    *jwt,
-		MaxAge:   constants.JwtMaxAge,
+		MaxAge:   constants.AuthCookieMaxAge,
 		HTTPOnly: true,
 		Secure:   true,
 	}
