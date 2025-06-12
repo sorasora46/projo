@@ -5,49 +5,16 @@ Minimalist project tracker written with React.js + Go Fiber
  - [ ] create login page
  - [ ] create home page
 ### TODO [backend]
- - [ ] fix unit test of user endpoint
- - [ ] change http method name to constant
- - [ ] change http status to constant
- - [ ] validate all request dtos
- - [x] setup userId in JWT and validate user before sending to next middleware // 2:00:00
- - [x] setup github CI // 1:50:20
- - [ ] create CRUD project endpoint
-    - [x] init route/endpoint // 16:28
-    - [x] init http handler // 16:28
-    - [x] init usecase // 35:13
-    - [x] create model // 31:17
-    - [x] init repo // 39:28
-    - [x] design project entity + managing TODO in README.md // 55:00
-    - [x] modify + create project_tasks and projects // 01:12:00
-    - [x] create project // 1:00:00
-      - [x] create branch
-      - [x] unit test for usecase
-      - [x] implement usecase
-      - [x] http handler
-      - [x] repo
-    - [x] get project by id // 2:00:00
-      - [x] create branch
-      - [x] unit test for usecase
-      - [x] http handler
-      - [x] repo
-    - [x] get all projects // 25:00
-      - [x] create branch
-      - [x] unit test for usecase
-      - [x] http handler
-      - [x] repo
-    - [ ] update project
-      - [x] create branch
-      - [x] unit test for usecase
-      - [x] http handler
-      - [x] repo
-    - [x] delete project // 50:00
-      - [x] create branch
-      - [x] unit test for usecase
-      - [x] http handler
-      - [x] repo
+ - [x] change http method name to constant
+ - [x] change http status to constant
  - [ ] refactor response objs
  - [ ] refactor error handling
+ - [ ] validate all request dtos
+ - [ ] fix unit test of user endpoint
  - [ ] create SIT for user endpoint
+ - [x] setup userId in JWT and validate user before sending to next middleware
+ - [x] setup github CI
+ - [x] create CRUD project endpoint
  - [x] create unit test for user CRUD
  - [x] create login endpoint
  - [x] handle auth middleware

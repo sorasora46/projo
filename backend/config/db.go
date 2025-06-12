@@ -1,4 +1,4 @@
-package infras
+package config
 
 import (
 	"fmt"
