@@ -14,6 +14,8 @@ type ProjectUsecase interface {
 	GetByProjectId(projectId string) (*entities.Project, error)
 	GetAllProjects(userId string) ([]entities.Project, error)
 	DeleteByProjectId(projectId string) error
+	UpdateProject(req dtos.UpdateProjectReq, projectId string) error
+	ProjectShouldExist(projectId string) error
 }
 
 type ProjectService struct {
@@ -54,15 +56,33 @@ func (p *ProjectService) GetAllProjects(userId string) ([]entities.Project, erro
 }
 
 func (p *ProjectService) DeleteByProjectId(projectId string) error {
-	isProjectExist, err := p.repo.CheckIfProjectExistById(projectId)
-	if err != nil {
+	if err := p.ProjectShouldExist(projectId); err != nil {
 		return err
-	}
-	if !isProjectExist {
-		return errors.New("project not exist")
 	}
 	if err := p.repo.DeleteByProjectId(projectId); err != nil {
 		return err
+	}
+	return nil
+}
+
+func (p *ProjectService) UpdateProject(req dtos.UpdateProjectReq, projectId string) error {
+	if err := p.ProjectShouldExist(projectId); err != nil {
+		return err
+	}
+	if err := p.repo.UpdateProject(req, projectId); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *ProjectService) ProjectShouldExist(projectId string) error {
+	isExist, err := p.repo.CheckIfProjectExistById(projectId)
+	if err != nil {
+		return err
+	}
+	if !isExist {
+		return errors.New("project not exist")
 	}
 	return nil
 }

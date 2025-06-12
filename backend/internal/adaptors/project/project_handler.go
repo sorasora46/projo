@@ -11,6 +11,7 @@ type ProjectHandler interface {
 	GetByProjectId(c *fiber.Ctx) error
 	GetAllProjects(c *fiber.Ctx) error
 	DeleteByProjectId(c *fiber.Ctx) error
+	UpdateProject(c *fiber.Ctx) error
 }
 
 type ProjectHandlerImpl struct {
@@ -82,4 +83,20 @@ func (p *ProjectHandlerImpl) DeleteByProjectId(c *fiber.Ctx) error {
 		})
 	}
 	return c.Status(204).JSON(dtos.CommonRes{})
+}
+
+func (p *ProjectHandlerImpl) UpdateProject(c *fiber.Ctx) error {
+	projectId := c.Params("projectId")
+	var req dtos.UpdateProjectReq
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(400).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+	if err := p.usecase.UpdateProject(req, projectId); err != nil {
+		return c.Status(500).JSON(dtos.CommonRes{
+			Result: err.Error(),
+		})
+	}
+	return c.Status(200).JSON(dtos.CommonRes{})
 }
