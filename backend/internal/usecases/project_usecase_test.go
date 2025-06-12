@@ -166,11 +166,99 @@ func TestGetAllProjects(t *testing.T) {
 	})
 }
 
+func TestUpdateProject(t *testing.T) {
+	t.Run("successfully update project", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		updateProj := dtos.UpdateProjectReq{
+			Name:        "project edited",
+			Description: "description edited",
+		}
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(true, nil)
+		mockRepo.On("UpdateProject", mock.AnythingOfType("dtos.UpdateProjectReq"), mock.AnythingOfType("string")).Return(nil)
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		err := service.UpdateProject(updateProj, projectId)
+
+		// Assert
+		assert.NoError(t, err)
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.CheckIfProjectExistById fails", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		updateProj := dtos.UpdateProjectReq{
+			Name:        "project edited",
+			Description: "description edited",
+		}
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(false, errors.New("db failure"))
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		err := service.UpdateProject(updateProj, projectId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Equal(t, "db failure", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.CheckIfProjectExistById return false", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		updateProj := dtos.UpdateProjectReq{
+			Name:        "project edited",
+			Description: "description edited",
+		}
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(false, nil)
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		err := service.UpdateProject(updateProj, projectId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Equal(t, "project not exist", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.UpdateProjet fails", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		updateProj := dtos.UpdateProjectReq{
+			Name:        "project edited",
+			Description: "description edited",
+		}
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(true, nil)
+		mockRepo.On("UpdateProject", mock.AnythingOfType("dtos.UpdateProjectReq"), mock.AnythingOfType("string")).Return(errors.New("db failure"))
+
+		service := usecases.NewProjectUsecase(mockRepo)
+
+		// Act
+		err := service.UpdateProject(updateProj, projectId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Equal(t, "db failure", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
+}
+
 func TestDeleteByProjectId(t *testing.T) {
 	t.Run("successfully delete project by Id", func(t *testing.T) {
 		// Arrange
 		projectId := uuid.NewString()
 		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(true, nil)
 		mockRepo.On("DeleteByProjectId", mock.AnythingOfType("string")).Return(nil)
 
 		service := usecases.NewProjectUsecase(mockRepo)
@@ -182,10 +270,43 @@ func TestDeleteByProjectId(t *testing.T) {
 		mockRepo.AssertExpectations(t)
 	})
 
+	t.Run("returns error when repo.CheckIfProjectExist return false", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(false, nil)
+
+		service := usecases.NewProjectUsecase(mockRepo)
+		// Act
+		err := service.DeleteByProjectId(projectId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Equal(t, "project not exist", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
+
+	t.Run("returns error when repo.CheckIfProjectExist fails", func(t *testing.T) {
+		// Arrange
+		projectId := uuid.NewString()
+		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(false, errors.New("db failure"))
+
+		service := usecases.NewProjectUsecase(mockRepo)
+		// Act
+		err := service.DeleteByProjectId(projectId)
+
+		// Assert
+		assert.Error(t, err)
+		assert.Equal(t, "db failure", err.Error())
+		mockRepo.AssertExpectations(t)
+	})
+
 	t.Run("returns error when repo.DeleteByProjectId fails", func(t *testing.T) {
 		// Arrange
 		projectId := uuid.NewString()
 		mockRepo := new(mocks.MockProjectRepository)
+		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(true, nil)
 		mockRepo.On("DeleteByProjectId", mock.AnythingOfType("string")).Return(errors.New("db failure"))
 
 		service := usecases.NewProjectUsecase(mockRepo)

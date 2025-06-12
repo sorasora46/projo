@@ -3,10 +3,13 @@ package infras
 import (
 	"fmt"
 	"log"
+	"os"
+	"time"
 
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type Database interface {
@@ -24,8 +27,18 @@ func NewDatabase() Database {
 }
 
 func (d *GormDatabase) InitDB(dsn string) {
+	dbLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			SlowThreshold:             time.Second, // Slow SQL threshold
+			LogLevel:                  logger.Info, // Log level
+			IgnoreRecordNotFoundError: false,       // Ignore ErrRecordNotFound error for logger
+			ParameterizedQueries:      false,       // Don't include params in the SQL log
+			Colorful:                  false,       // Disable color
+		},
+	)
 	var err error
-	d.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	d.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: dbLogger})
 	if err != nil {
 		log.Fatal(err)
 	}
