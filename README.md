@@ -5,7 +5,7 @@ Minimalist project tracker written with React.js + Go Fiber
  - [ ] create login page
  - [ ] create home page
 ### TODO [backend]
- - [ ] validate all request dtos
+ - [x] validate all request dtos
  - [ ] create SIT for user endpoint
  - [ ] create E2E for user endpoint
  - [ ] create SIT for project endpoint
