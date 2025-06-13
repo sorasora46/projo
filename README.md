@@ -1,6 +1,16 @@
 # projo
 Minimalist project tracker written with React.js + Go Fiber
 
+### Features
+- user must authenticate themself to the system
+- user should be able perform CRUD ops project(s)
+- user should be able perform CRUD ops project's task(s)
+- user should be able to view how many tasks left
+- user should be able to view all projects in dashboard
+- each project in dashboard should have created date, title, DONE task percentage
+- user can view percentage of DONE/non-DONE tasks
+- task should have status: TODO, DOING, DONE
+
 ### TODO [frontend]
  - [ ] create login page
  - [ ] create home page
@@ -25,3 +35,10 @@ Minimalist project tracker written with React.js + Go Fiber
  - [x] create CRUD user endpoint
  - [x] setup GORM (better structured code)
  - [x] refactor init ENV
+
+### UI Resource
+Similar to zed UI or these
+- https://dribbble.com/shots/25683483-Dashboard-UI
+- https://dribbble.com/shots/25155029-Finance-Dashboard-Design
+- https://dribbble.com/shots/23355899-Finance-Dashboard-design
+- https://dribbble.com/shots/23185186-Finance-Dashboard-Design
