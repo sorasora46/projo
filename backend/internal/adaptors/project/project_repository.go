@@ -2,7 +2,7 @@ package project
 
 import (
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
-	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"gorm.io/gorm"
 )
@@ -60,7 +60,7 @@ func (p *ProjectRepositoryImpl) CheckIfProjectExistById(projectId string) (bool,
 	return count == 1, nil
 }
 
-func (p *ProjectRepositoryImpl) UpdateProject(req dtos.UpdateProjectReq, projectId string) error {
+func (p *ProjectRepositoryImpl) UpdateProject(req req.UpdateProjectReq, projectId string) error {
 	transaction := p.db.Model(&entities.Project{}).Where("id = ?", projectId).Updates(req)
 	if transaction.Error != nil {
 		return transaction.Error

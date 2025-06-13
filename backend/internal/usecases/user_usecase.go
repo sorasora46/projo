@@ -6,6 +6,7 @@ import (
 	"github.com/sorasora46/projo/backend/config"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"github.com/sorasora46/projo/backend/pkg/constants"
 	"github.com/sorasora46/projo/backend/pkg/utils"
@@ -13,7 +14,7 @@ import (
 )
 
 type UserUsecase interface {
-	CreateUser(req dtos.CreateUserReq) error
+	CreateUser(req req.CreateUserReq) error
 	GetByUsername(username string) (*dtos.UserDTO, error)
 	DeleteByUsername(username string) error
 	Login(username string, password string) (*string, error)
@@ -28,7 +29,7 @@ func NewUserUsercase(repo interfaces.UserRepository, envManager config.EnvManage
 	return &UserService{repo: repo, envManager: envManager}
 }
 
-func (u *UserService) CreateUser(req dtos.CreateUserReq) error {
+func (u *UserService) CreateUser(req req.CreateUserReq) error {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err

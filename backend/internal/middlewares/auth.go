@@ -7,6 +7,7 @@ import (
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
 	"github.com/sorasora46/projo/backend/internal/dtos"
 	"github.com/sorasora46/projo/backend/pkg/constants"
+	"github.com/sorasora46/projo/backend/pkg/utils"
 )
 
 type AuthMiddleware interface {
@@ -41,7 +42,7 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 	accessToken := c.Cookies(constants.AuthCookieName)
 	if accessToken == "" {
 		err := fiber.NewError(fiber.StatusUnauthorized, constants.ErrMissingAccessToken)
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusUnauthorized,
 			Error: err,
 		})
@@ -53,7 +54,7 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS384.Alg()}))
 
 	if err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusUnauthorized,
 			Error: err,
 		})
@@ -61,7 +62,7 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 
 	userId, err := claims.GetSubject()
 	if err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusUnauthorized,
 			Error: err,
 		})
@@ -70,14 +71,14 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 
 	isExist, err := a.userRepo.CheckIfUserExistByUniqueKey(username)
 	if err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusInternalServerError,
 			Error: err,
 		})
 	}
 	if !isExist {
 		err := fiber.NewError(fiber.StatusUnauthorized, constants.ErrUserNotExist)
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusUnauthorized,
 			Error: err,
 		})

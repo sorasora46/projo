@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"github.com/sorasora46/projo/backend/internal/usecases"
 	"github.com/sorasora46/projo/backend/internal/usecases/mocks"
@@ -18,7 +18,7 @@ func TestCreateProject(t *testing.T) {
 	t.Run("successfully create a project", func(t *testing.T) {
 		// Arrange
 		userId := uuid.NewString()
-		createRequest := dtos.CreateProjectReq{
+		createRequest := req.CreateProjectReq{
 			Name:        "Test Project",
 			Description: "A test project",
 		}
@@ -45,7 +45,7 @@ func TestCreateProject(t *testing.T) {
 	t.Run("returns error when repo.Create fails", func(t *testing.T) {
 		// Arrange
 		userId := uuid.NewString()
-		createRequest := dtos.CreateProjectReq{
+		createRequest := req.CreateProjectReq{
 			Name:        "Test Project",
 			Description: "A test project",
 		}
@@ -170,7 +170,7 @@ func TestUpdateProject(t *testing.T) {
 	t.Run("successfully update project", func(t *testing.T) {
 		// Arrange
 		projectId := uuid.NewString()
-		updateProj := dtos.UpdateProjectReq{
+		updateProj := req.UpdateProjectReq{
 			Name:        "project edited",
 			Description: "description edited",
 		}
@@ -191,7 +191,7 @@ func TestUpdateProject(t *testing.T) {
 	t.Run("returns error when repo.CheckIfProjectExistById fails", func(t *testing.T) {
 		// Arrange
 		projectId := uuid.NewString()
-		updateProj := dtos.UpdateProjectReq{
+		updateProj := req.UpdateProjectReq{
 			Name:        "project edited",
 			Description: "description edited",
 		}
@@ -212,7 +212,7 @@ func TestUpdateProject(t *testing.T) {
 	t.Run("returns error when repo.CheckIfProjectExistById return false", func(t *testing.T) {
 		// Arrange
 		projectId := uuid.NewString()
-		updateProj := dtos.UpdateProjectReq{
+		updateProj := req.UpdateProjectReq{
 			Name:        "project edited",
 			Description: "description edited",
 		}
@@ -233,7 +233,7 @@ func TestUpdateProject(t *testing.T) {
 	t.Run("returns error when repo.UpdateProjet fails", func(t *testing.T) {
 		// Arrange
 		projectId := uuid.NewString()
-		updateProj := dtos.UpdateProjectReq{
+		updateProj := req.UpdateProjectReq{
 			Name:        "project edited",
 			Description: "description edited",
 		}

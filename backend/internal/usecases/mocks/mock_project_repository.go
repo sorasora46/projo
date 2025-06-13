@@ -1,7 +1,7 @@
 package mocks
 
 import (
-	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"github.com/stretchr/testify/mock"
 )
@@ -41,7 +41,7 @@ func (m *MockProjectRepository) CheckIfProjectExistById(projectId string) (bool,
 	return args.Bool(0), args.Error(1)
 }
 
-func (m *MockProjectRepository) UpdateProject(req dtos.UpdateProjectReq, projectId string) error {
+func (m *MockProjectRepository) UpdateProject(req req.UpdateProjectReq, projectId string) error {
 	args := m.Called(req, projectId)
 	return args.Error(0)
 }

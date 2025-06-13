@@ -1,6 +1,6 @@
-package dtos
+package req
 
-type CreateProjectReq struct {
+type UpdateProjectReq struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
