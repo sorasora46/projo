@@ -5,16 +5,16 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/sorasora46/projo/backend/internal/adaptors/interfaces"
-	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/entities"
 )
 
 type ProjectUsecase interface {
-	CreateProject(req dtos.CreateProjectReq, userId string) error
+	CreateProject(req req.CreateProjectReq, userId string) error
 	GetByProjectId(projectId string) (*entities.Project, error)
 	GetAllProjects(userId string) ([]entities.Project, error)
 	DeleteByProjectId(projectId string) error
-	UpdateProject(req dtos.UpdateProjectReq, projectId string) error
+	UpdateProject(req req.UpdateProjectReq, projectId string) error
 	ProjectShouldExist(projectId string) error
 }
 
@@ -26,7 +26,7 @@ func NewProjectUsecase(repo interfaces.ProjectRepository) ProjectUsecase {
 	return &ProjectService{repo: repo}
 }
 
-func (p *ProjectService) CreateProject(req dtos.CreateProjectReq, userId string) error {
+func (p *ProjectService) CreateProject(req req.CreateProjectReq, userId string) error {
 	newProject := &entities.Project{
 		Id:          uuid.NewString(),
 		Name:        req.Name,
@@ -65,7 +65,7 @@ func (p *ProjectService) DeleteByProjectId(projectId string) error {
 	return nil
 }
 
-func (p *ProjectService) UpdateProject(req dtos.UpdateProjectReq, projectId string) error {
+func (p *ProjectService) UpdateProject(req req.UpdateProjectReq, projectId string) error {
 	if err := p.ProjectShouldExist(projectId); err != nil {
 		return err
 	}

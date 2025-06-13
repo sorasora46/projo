@@ -3,8 +3,11 @@ package user
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/usecases"
+	vldt "github.com/sorasora46/projo/backend/internal/validator"
 	"github.com/sorasora46/projo/backend/pkg/constants"
+	"github.com/sorasora46/projo/backend/pkg/utils"
 )
 
 type UserHandler interface {
@@ -15,30 +18,35 @@ type UserHandler interface {
 }
 
 type UserHandlerImpl struct {
-	usecase usecases.UserUsecase
+	usecase      usecases.UserUsecase
+	reqValidator vldt.ReqValidator
 }
 
-func NewUserHandler(usecase usecases.UserUsecase) UserHandler {
-	return &UserHandlerImpl{usecase: usecase}
+func NewUserHandler(usecase usecases.UserUsecase, reqValidator vldt.ReqValidator) UserHandler {
+	return &UserHandlerImpl{usecase: usecase, reqValidator: reqValidator}
 }
 
 func (u *UserHandlerImpl) CreateUser(c *fiber.Ctx) error {
-	var req dtos.CreateUserReq
+	var req req.CreateUserReq
 	if err := c.BodyParser(&req); err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusBadRequest,
 			Error: err,
 		})
 	}
 
+	if errs := u.reqValidator.Validate(req); errs != nil {
+		return utils.NewFailValidationRes(c, fiber.StatusBadRequest, errs)
+	}
+
 	if err := u.usecase.CreateUser(req); err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusInternalServerError,
 			Error: err,
 		})
 	}
 
-	return dtos.NewSuccessRes(c, dtos.Response{
+	return utils.NewSuccessRes(c, dtos.Response{
 		Code:   fiber.StatusCreated,
 		Result: nil,
 	})
@@ -48,13 +56,13 @@ func (u *UserHandlerImpl) GetByUsername(c *fiber.Ctx) error {
 	username := c.Params(constants.UsernameParam)
 	user, err := u.usecase.GetByUsername(username)
 	if err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusInternalServerError,
 			Error: err,
 		})
 	}
 
-	return dtos.NewSuccessRes(c, dtos.Response{
+	return utils.NewSuccessRes(c, dtos.Response{
 		Code:   fiber.StatusOK,
 		Result: user,
 	})
@@ -64,30 +72,34 @@ func (u *UserHandlerImpl) DeleteByUsername(c *fiber.Ctx) error {
 	username := c.Params(constants.UsernameParam)
 	err := u.usecase.DeleteByUsername(username)
 	if err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusInternalServerError,
 			Error: err,
 		})
 	}
 
-	return dtos.NewSuccessRes(c, dtos.Response{
+	return utils.NewSuccessRes(c, dtos.Response{
 		Code:   fiber.StatusNoContent,
 		Result: nil,
 	})
 }
 
 func (u *UserHandlerImpl) Login(c *fiber.Ctx) error {
-	var req dtos.LoginReq
+	var req req.LoginReq
 	if err := c.BodyParser(&req); err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusBadRequest,
 			Error: err,
 		})
 	}
 
+	if errs := u.reqValidator.Validate(req); errs != nil {
+		return utils.NewFailValidationRes(c, fiber.StatusBadRequest, errs)
+	}
+
 	jwt, err := u.usecase.Login(req.Username, req.Password)
 	if err != nil {
-		return dtos.NewFailRes(c, dtos.Response{
+		return utils.NewFailRes(c, dtos.Response{
 			Code:  fiber.StatusInternalServerError,
 			Error: err,
 		})
@@ -102,7 +114,7 @@ func (u *UserHandlerImpl) Login(c *fiber.Ctx) error {
 	}
 	c.Cookie(cookie)
 
-	return dtos.NewSuccessRes(c, dtos.Response{
+	return utils.NewSuccessRes(c, dtos.Response{
 		Code:   fiber.StatusOK,
 		Result: nil,
 	})

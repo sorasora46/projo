@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/sorasora46/projo/backend/internal/dtos"
+	"github.com/sorasora46/projo/backend/internal/dtos/req"
 	"github.com/sorasora46/projo/backend/internal/entities"
 	"github.com/sorasora46/projo/backend/internal/usecases"
 	"github.com/sorasora46/projo/backend/internal/usecases/mocks"
@@ -17,7 +17,7 @@ import (
 func TestCreateUser(t *testing.T) {
 	t.Run("successfully creates a user", func(t *testing.T) {
 		// Arrange
-		req := dtos.CreateUserReq{
+		req := req.CreateUserReq{
 			FirstName: "John",
 			LastName:  "Doe",
 			Username:  "john_doe",
@@ -36,7 +36,7 @@ func TestCreateUser(t *testing.T) {
 
 	t.Run("returns error if repo.Create fails", func(t *testing.T) {
 		// Arrange
-		req := dtos.CreateUserReq{
+		req := req.CreateUserReq{
 			FirstName: "John",
 			LastName:  "Doe",
 			Username:  "john_doe",
@@ -132,7 +132,7 @@ func TestDeleteByUsername(t *testing.T) {
 func TestLogin(t *testing.T) {
 	t.Run("login successfully", func(t *testing.T) {
 		password := "very_strong_password"
-		req := dtos.LoginReq{
+		req := req.LoginReq{
 			Username: "john_doe",
 			Password: password,
 		}
@@ -165,7 +165,7 @@ func TestLogin(t *testing.T) {
 	})
 
 	t.Run("returns error when repo.GetLoginInfoByUsername fails", func(t *testing.T) {
-		req := dtos.LoginReq{
+		req := req.LoginReq{
 			Username: "john_doe",
 			Password: "password",
 		}
@@ -187,7 +187,7 @@ func TestLogin(t *testing.T) {
 	t.Run("returns error when bcrypt.CompareHashAndPassword fails", func(t *testing.T) {
 		password := "correct_password"
 		incorrectPassword := "wrong_password"
-		req := dtos.LoginReq{
+		req := req.LoginReq{
 			Username: "john_doe",
 			Password: incorrectPassword,
 		}
