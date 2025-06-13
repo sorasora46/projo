@@ -176,7 +176,7 @@ func TestUpdateProject(t *testing.T) {
 		}
 		mockRepo := new(mocks.MockProjectRepository)
 		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(true, nil)
-		mockRepo.On("UpdateProject", mock.AnythingOfType("dtos.UpdateProjectReq"), mock.AnythingOfType("string")).Return(nil)
+		mockRepo.On("UpdateProject", mock.AnythingOfType("req.UpdateProjectReq"), mock.AnythingOfType("string")).Return(nil)
 
 		service := usecases.NewProjectUsecase(mockRepo)
 
@@ -239,7 +239,7 @@ func TestUpdateProject(t *testing.T) {
 		}
 		mockRepo := new(mocks.MockProjectRepository)
 		mockRepo.On("CheckIfProjectExistById", mock.AnythingOfType("string")).Return(true, nil)
-		mockRepo.On("UpdateProject", mock.AnythingOfType("dtos.UpdateProjectReq"), mock.AnythingOfType("string")).Return(errors.New("db failure"))
+		mockRepo.On("UpdateProject", mock.AnythingOfType("req.UpdateProjectReq"), mock.AnythingOfType("string")).Return(errors.New("db failure"))
 
 		service := usecases.NewProjectUsecase(mockRepo)
 
