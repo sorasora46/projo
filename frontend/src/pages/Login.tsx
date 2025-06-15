@@ -1,8 +1,85 @@
+import { useState } from "react";
+import { HiEye, HiEyeOff } from "react-icons/hi";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema, type LoginFormData } from "../schemas/login";
+
 const Login = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({ resolver: zodResolver(LoginSchema) });
+
+  const [isHidePassword, setIsHidePassword] = useState(true);
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log("Valid form data:", data);
+  };
+
   return (
-    <div>
-      <p>Login Page</p>
-    </div>
+    <main className="h-dvh w-full flex justify-center items-center">
+      <div className="card bg-base-100 sm:w-1/2 md:w-96 shadow-md">
+        <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+          <h2 className="card-title">Login to your account</h2>
+
+          <div className="m-2 flex flex-col justify-center items-center gap-5">
+            <div className="w-full flex flex-col gap-1">
+              <label htmlFor="email" className="self-start">
+                Email
+              </label>
+              <input
+                id="email"
+                type="text"
+                placeholder="Email"
+                className={`input w-full ${errors.email ? "input-error" : "input-bordered"}`}
+                {...register("email")}
+              />
+              {errors.email && (
+                <span className="text-error text-sm">
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
+            <div className="w-full flex flex-col gap-1">
+              <label htmlFor="password" className="self-start">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={isHidePassword ? "password" : "text"}
+                  placeholder="Password"
+                  className={`input w-full pr-10 ${errors.password ? "input-error" : "input-bordered"}`}
+                  {...register("password")}
+                />
+                <label className="swap swap-rotate absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={isHidePassword}
+                    onChange={() => setIsHidePassword(!isHidePassword)}
+                    className="sr-only"
+                  />
+                  <HiEyeOff className="swap-on text-md" />
+                  <HiEye className="swap-off text-md" />
+                </label>
+              </div>
+              {errors.password && (
+                <span className="text-error text-sm">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="card-actions justify-center">
+            <button type="submit" className="w-full btn btn-primary">
+              Login
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
   );
 };
 
