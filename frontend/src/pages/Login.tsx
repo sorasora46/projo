@@ -13,7 +13,7 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginFormData>({ resolver: zodResolver(LoginSchema) });
 
-  const [isHidePassword, setIsHidePassword] = useState(true);
+  const [isHidePassword, setIsHidePassword] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
