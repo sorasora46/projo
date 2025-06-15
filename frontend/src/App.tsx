@@ -4,16 +4,22 @@ import { Routes } from "react-router";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import { AuthProvider } from "./hooks/useAuth.tsx";
+import ProtectedRoutes from "./components/ProtectedRoutes.tsx";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 };
