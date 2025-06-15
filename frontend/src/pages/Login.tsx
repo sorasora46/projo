@@ -3,6 +3,7 @@ import { HiEye, HiEyeOff } from "react-icons/hi";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, type LoginFormData } from "../schemas/login";
+import { Link, useNavigate } from "react-router";
 
 const Login = () => {
   const {
@@ -12,6 +13,8 @@ const Login = () => {
   } = useForm<LoginFormData>({ resolver: zodResolver(LoginSchema) });
 
   const [isHidePassword, setIsHidePassword] = useState(true);
+
+  const navigate = useNavigate();
 
   const onSubmit = (data: LoginFormData) => {
     console.log("Valid form data:", data);
@@ -42,9 +45,14 @@ const Login = () => {
               )}
             </div>
             <div className="w-full flex flex-col gap-1">
-              <label htmlFor="password" className="self-start">
-                Password
-              </label>
+              <div className="flex justify-between items-center">
+                <label htmlFor="password" className="self-start">
+                  Password
+                </label>
+                <Link to="/forgot-password" className="text-xs text-info">
+                  Forgot ?
+                </Link>
+              </div>
               <div className="relative">
                 <input
                   id="password"
@@ -60,8 +68,8 @@ const Login = () => {
                     onChange={() => setIsHidePassword(!isHidePassword)}
                     className="sr-only"
                   />
-                  <HiEyeOff className="swap-on text-md" />
-                  <HiEye className="swap-off text-md" />
+                  <HiEyeOff className="swap-on text-md text-gray-400" />
+                  <HiEye className="swap-off text-md text-gray-400" />
                 </label>
               </div>
               {errors.password && (
@@ -75,6 +83,16 @@ const Login = () => {
           <div className="card-actions justify-center">
             <button type="submit" className="w-full btn btn-primary">
               Login
+            </button>
+          </div>
+          <div className="divider">OR</div>
+          <div className="card-actions justify-center">
+            <button
+              type="button"
+              className="w-full btn btn-outline btn-secondary"
+              onClick={() => navigate("/register")}
+            >
+              Sign up
             </button>
           </div>
         </form>
