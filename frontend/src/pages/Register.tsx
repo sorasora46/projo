@@ -1,8 +1,8 @@
 const Register = () => {
   return (
-    <div>
+    <main>
       <p>Register Page</p>
-    </div>
+    </main>
   );
 };
 
