@@ -6,6 +6,7 @@ import Register from "./pages/Register.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "./hooks/useAuth.tsx";
 import ProtectedRoutes from "./components/ProtectedRoutes.tsx";
+import ForgotPassword from "./pages/ForgotPassword.tsx";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AuthProvider>
