@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, type LoginFormData } from "../schemas/login";
 import { Link, useNavigate } from "react-router";
+import FieldError from "../components/FieldError";
 
 const Login = () => {
   const {
@@ -25,8 +26,7 @@ const Login = () => {
       <div className="card bg-base-100 sm:w-1/2 md:w-96 shadow-md">
         <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
           <h2 className="card-title">Login to your account</h2>
-
-          <div className="m-2 flex flex-col justify-center items-center gap-5">
+          <div className="m-2 flex flex-col justify-center items-center gap-3">
             <div className="w-full flex flex-col gap-1">
               <label htmlFor="email" className="self-start">
                 Email
@@ -38,11 +38,7 @@ const Login = () => {
                 className={`input w-full ${errors.email ? "input-error" : "input-bordered"}`}
                 {...register("email")}
               />
-              {errors.email && (
-                <span className="text-error text-sm">
-                  {errors.email.message}
-                </span>
-              )}
+              <FieldError message={errors.email?.message} />
             </div>
             <div className="w-full flex flex-col gap-1">
               <div className="flex justify-between items-center">
@@ -72,14 +68,9 @@ const Login = () => {
                   <HiEye className="swap-off text-md text-gray-400" />
                 </label>
               </div>
-              {errors.password && (
-                <span className="text-error text-sm">
-                  {errors.password.message}
-                </span>
-              )}
+              <FieldError message={errors.password?.message} />
             </div>
           </div>
-
           <div className="card-actions justify-center">
             <button type="submit" className="w-full btn btn-primary">
               Login
