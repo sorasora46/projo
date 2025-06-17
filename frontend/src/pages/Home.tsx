@@ -13,58 +13,62 @@ const Home = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="h-dvh w-full flex">
-      <aside className="h-full bg-blue-500 p-4">
-        <h2 className="text-2xl">Projo</h2>
-        <nav>
-          <ul className="menu text-xl">
-            <li>
-              <Link
-                to={ProjoPath.HOME}
-                className="tooltip tooltip-right tooltip-primary"
-                data-tip="Home"
-                onMouseEnter={() => setIsProjectHover(true)}
-                onMouseLeave={() => setIsProjectHover(false)}
-              >
-                {isProjectHover || pathname === ProjoPath.HOME ? (
-                  <AiFillProject />
-                ) : (
-                  <AiOutlineProject />
-                )}
-              </Link>
-              <Link
-                to={ProjoPath.ARCHIVED}
-                className="tooltip tooltip-right tooltip-primary"
-                data-tip="Archived"
-                onMouseEnter={() => setIsArchivedHover(true)}
-                onMouseLeave={() => setIsArchivedHover(false)}
-              >
-                {isArchivedHover || pathname === ProjoPath.ARCHIVED ? (
-                  <RiInboxArchiveFill />
-                ) : (
-                  <RiInboxArchiveLine />
-                )}
-              </Link>
-              <Link
-                to={ProjoPath.DELETED}
-                className="tooltip tooltip-right tooltip-primary"
-                data-tip="Deleted"
-                onMouseEnter={() => setIsDeletedHover(true)}
-                onMouseLeave={() => setIsDeletedHover(false)}
-              >
-                {isDeletedHover || pathname === ProjoPath.DELETED ? (
-                  <MdDelete />
-                ) : (
-                  <MdDeleteOutline />
-                )}
-              </Link>
-            </li>
-          </ul>
-        </nav>
+    <div className="h-dvh w-full p-3 flex bg-gray-100">
+      <aside className="h-full">
+        <div className="card bg-white shadow-md h-full">
+          <div className="card-body p-4">
+            <h2 className="card-title text-2xl">Projo</h2>
+            <nav>
+              <ul className="menu text-xl">
+                <li>
+                  <Link
+                    to={ProjoPath.HOME}
+                    className="tooltip tooltip-right tooltip-primary"
+                    data-tip="Home"
+                    onMouseEnter={() => setIsProjectHover(true)}
+                    onMouseLeave={() => setIsProjectHover(false)}
+                  >
+                    {isProjectHover || pathname === ProjoPath.HOME ? (
+                      <AiFillProject />
+                    ) : (
+                      <AiOutlineProject />
+                    )}
+                  </Link>
+                  <Link
+                    to={ProjoPath.ARCHIVED}
+                    className="tooltip tooltip-right tooltip-primary"
+                    data-tip="Archived"
+                    onMouseEnter={() => setIsArchivedHover(true)}
+                    onMouseLeave={() => setIsArchivedHover(false)}
+                  >
+                    {isArchivedHover || pathname === ProjoPath.ARCHIVED ? (
+                      <RiInboxArchiveFill />
+                    ) : (
+                      <RiInboxArchiveLine />
+                    )}
+                  </Link>
+                  <Link
+                    to={ProjoPath.DELETED}
+                    className="tooltip tooltip-right tooltip-primary"
+                    data-tip="Deleted"
+                    onMouseEnter={() => setIsDeletedHover(true)}
+                    onMouseLeave={() => setIsDeletedHover(false)}
+                  >
+                    {isDeletedHover || pathname === ProjoPath.DELETED ? (
+                      <MdDelete />
+                    ) : (
+                      <MdDeleteOutline />
+                    )}
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
       </aside>
       <div className="w-full flex flex-col">
         <Topbar />
-        <main className="flex-1 bg-gray-100 p-4">
+        <main className="flex-1 p-3">
           <p>Main content area</p>
           <p>{pathname}</p>
         </main>

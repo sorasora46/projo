@@ -15,14 +15,14 @@ const Topbar = () => {
   const [isBellHover, setIsBellHover] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   return (
-    <header className="w-full flex justify-between items-center bg-blue-500 p-4 py-2 pe-3">
+    <header className="w-full flex justify-between items-center px-3">
       <h1>Hello, firstName lastName</h1>
-      <div className="flex items-center gap-2">
-        <ul className="flex items-center gap-5 text-lg">
+      <div className="flex justify-center items-center gap-2">
+        <ul className="flex justify-center items-center gap-2 text-lg">
           <li>
             <Link
               to=""
-              className="tooltip tooltip-bottom tooltip-primary"
+              className="tooltip tooltip-bottom tooltip-primary inline-flex items-center justify-center w-10 h-10"
               data-tip="Calendar"
               onMouseEnter={() => setIsCalendarHover(true)}
               onMouseLeave={() => setIsCalendarHover(false)}
@@ -33,7 +33,7 @@ const Topbar = () => {
           <li>
             <Link
               to=""
-              className="tooltip tooltip-bottom tooltip-primary"
+              className="tooltip tooltip-bottom tooltip-primary inline-flex items-center justify-center w-10 h-10"
               data-tip="Notification"
               onMouseEnter={() => setIsBellHover(true)}
               onMouseLeave={() => setIsBellHover(false)}
@@ -43,7 +43,7 @@ const Topbar = () => {
           </li>
         </ul>
         <button
-          className="btn btn-link text-xl"
+          className="btn btn-link text-xl text-black"
           popoverTarget="popover-1"
           style={{ anchorName: "--anchor-1" } as React.CSSProperties}
           onClick={() => setIsProfileOpen((prev) => !prev)}
