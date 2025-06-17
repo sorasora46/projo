@@ -6,7 +6,7 @@ const Home = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="h-dvh w-full p-3 flex bg-gray-100">
+    <div className="h-dvh w-full p-3 flex bg-base-200">
       <Sidebar pathname={pathname} />
       <div className="w-full flex flex-col">
         <Topbar />

@@ -4,18 +4,28 @@ const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="p-3 h-dvh w-full flex flex-col justify-center items-center text-center gap-5">
-      <p className="text-8xl text-blue-400">404</p>
-      <div className="flex flex-col justify-center items-center text-xl gap-3">
-        <h1 className="text-3xl">Page not found</h1>
-        <p>Sorry, We can't find the page you're looking for.</p>
+    <main className="hero bg-base-200 min-h-screen">
+      <div className="hero-content flex-col lg:flex-row-reverse text-center">
+        <div className="max-w-md">
+          <h1 className="text-6xl font-extrabold text-error mb-4">404</h1>
+          <h2 className="text-2xl font-semibold mb-2">Oops! Page not found</h2>
+          <p className="py-4">
+            The page you’re looking for doesn’t exist or has been moved. Let’s
+            get you back on track!
+          </p>
+          <div className="flex justify-center gap-4 mt-6">
+            <button className="btn btn-primary" onClick={() => navigate("/")}>
+              🏠 Go Home
+            </button>
+            <button
+              className="btn btn-outline"
+              onClick={() => navigate("/contact")}
+            >
+              📩 Contact Support
+            </button>
+          </div>
+        </div>
       </div>
-      <button
-        className="btn btn-outline btn-info hover:text-white"
-        onClick={() => navigate("/")}
-      >
-        Go Home
-      </button>
     </main>
   );
 };
