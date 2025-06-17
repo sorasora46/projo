@@ -6,4 +6,5 @@ export const ProjoPath = {
   LOGIN: "/login",
   REGISTER: "/register",
   FORGOT_PASSWORD: "/forgot-password",
+  CATCH_ALL: "*",
 };
