@@ -14,11 +14,14 @@ const Topbar = () => {
   const [isCalendarHover, setIsCalendarHover] = useState(false);
   const [isBellHover, setIsBellHover] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
   return (
-    <header className="w-full flex justify-between items-center px-3">
-      <h1 className="text-bold text-xl">Hello! firstName lastName</h1>
+    <header className="w-full flex sm:justify-between justify-end items-center px-3 bg-base-100 sm:bg-inherit">
+      <h1 className="text-bold text-xl hidden sm:block">
+        Hello! firstName lastName
+      </h1>
       <div className="flex justify-center items-center gap-2">
-        <ul className="flex justify-center items-center gap-2 text-lg">
+        <ul className="hidden sm:flex justify-center items-center gap-2 text-lg">
           <li>
             <Link
               to=""
@@ -56,7 +59,7 @@ const Topbar = () => {
           {isProfileOpen ? <RiArrowUpSLine /> : <RiArrowDownSLine />}
         </button>
         <ul
-          className="dropdown menu bg-base-100 shadow-sm p-0 [&_li>*]:rounded-none [&_li>*]:px-5"
+          className="dropdown dropdown-end menu bg-base-100 shadow-sm p-0 [&_li>*]:rounded-none [&_li>*]:px-5"
           popover="auto"
           id="popover-1"
           style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
@@ -65,6 +68,18 @@ const Topbar = () => {
             <Link to="/profile">
               <CgProfile />
               Profile
+            </Link>
+          </li>
+          <li className="sm:hidden block">
+            <Link to="">
+              <HiCalendarDays />
+              Calendar
+            </Link>
+          </li>
+          <li className="sm:hidden block">
+            <Link to="">
+              <HiBell />
+              Notification
             </Link>
           </li>
           <li>
