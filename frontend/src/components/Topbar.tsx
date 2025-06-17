@@ -22,6 +22,8 @@ const Topbar = () => {
           <li>
             <Link
               to=""
+              className="tooltip tooltip-bottom tooltip-primary"
+              data-tip="Calendar"
               onMouseEnter={() => setIsCalendarHover(true)}
               onMouseLeave={() => setIsCalendarHover(false)}
             >
@@ -31,6 +33,8 @@ const Topbar = () => {
           <li>
             <Link
               to=""
+              className="tooltip tooltip-bottom tooltip-primary"
+              data-tip="Notification"
               onMouseEnter={() => setIsBellHover(true)}
               onMouseLeave={() => setIsBellHover(false)}
             >
