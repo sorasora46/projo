@@ -16,7 +16,7 @@ const Topbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   return (
     <header className="w-full flex justify-between items-center px-3">
-      <h1>Hello, firstName lastName</h1>
+      <h1 className="text-bold text-xl">Hello! firstName lastName</h1>
       <div className="flex justify-center items-center gap-2">
         <ul className="flex justify-center items-center gap-2 text-lg">
           <li>
