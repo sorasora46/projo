@@ -13,6 +13,7 @@ Minimalist project tracker written with React.js + Go Fiber
 
 ### TODO [frontend]
  - [ ] create home page
+ - [ ] refactor react router to use constant path
  - [x] create forgot password page
  - [x] create protected routes
  - [x] create register page
