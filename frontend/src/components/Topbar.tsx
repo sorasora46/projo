@@ -9,6 +9,7 @@ import {
 import { MdLogout } from "react-icons/md";
 import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 import { Link } from "react-router";
+import { ProjoPath } from "../constants/path";
 
 const Topbar = () => {
   const [isCalendarHover, setIsCalendarHover] = useState(false);
@@ -24,7 +25,7 @@ const Topbar = () => {
         <ul className="hidden sm:flex justify-center items-center gap-2 text-lg">
           <li>
             <Link
-              to=""
+              to={ProjoPath.CALENDAR}
               className="tooltip tooltip-bottom tooltip-primary inline-flex items-center justify-center w-10 h-10"
               data-tip="Calendar"
               onMouseEnter={() => setIsCalendarHover(true)}
@@ -35,7 +36,7 @@ const Topbar = () => {
           </li>
           <li>
             <Link
-              to=""
+              to={ProjoPath.NOTIFICATION}
               className="tooltip tooltip-bottom tooltip-primary inline-flex items-center justify-center w-10 h-10"
               data-tip="Notification"
               onMouseEnter={() => setIsBellHover(true)}
@@ -65,19 +66,19 @@ const Topbar = () => {
           style={{ positionAnchor: "--anchor-1" } as React.CSSProperties}
         >
           <li>
-            <Link to="/profile">
+            <Link to={ProjoPath.PROFILE}>
               <CgProfile />
               Profile
             </Link>
           </li>
           <li className="sm:hidden block">
-            <Link to="">
+            <Link to={ProjoPath.CALENDAR}>
               <HiCalendarDays />
               Calendar
             </Link>
           </li>
           <li className="sm:hidden block">
-            <Link to="">
+            <Link to={ProjoPath.NOTIFICATION}>
               <HiBell />
               Notification
             </Link>

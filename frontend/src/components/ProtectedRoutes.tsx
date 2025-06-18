@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../hooks/useAuth";
+import { ProjoPath } from "../constants/path";
 
 const ProtectedRoute = () => {
   const { authenticated, loading } = useAuth();
@@ -8,7 +9,7 @@ const ProtectedRoute = () => {
     return <p>loading . . .</p>;
   }
 
-  return authenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return authenticated ? <Outlet /> : <Navigate to={ProjoPath.LOGIN} replace />;
 };
 
 export default ProtectedRoute;

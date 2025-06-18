@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { ProjoPath } from "../constants/path";
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -13,13 +14,16 @@ const NotFound = () => {
             The page you’re looking for doesn’t exist or has been moved. Let’s
             get you back on track!
           </p>
-          <div className="flex justify-center gap-4 mt-6">
-            <button className="btn btn-primary" onClick={() => navigate("/")}>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(ProjoPath.HOME)}
+            >
               🏠 Go Home
             </button>
             <button
               className="btn btn-outline"
-              onClick={() => navigate("/contact")}
+              onClick={() => navigate(ProjoPath.CONTACT)}
             >
               📩 Contact Support
             </button>

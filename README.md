@@ -12,8 +12,9 @@ Minimalist project tracker written with React.js + Go Fiber
 - task should have status: TODO, DOING, DONE
 
 ### TODO [frontend]
- - [ ] create home page
- - [ ] refactor react router to use constant path
+ - [ ] integrate API
+ - [x] refactor react router to use constant path
+ - [x] create home page
  - [x] create forgot password page
  - [x] create protected routes
  - [x] create register page

@@ -6,5 +6,8 @@ export const ProjoPath = {
   LOGIN: "/login",
   REGISTER: "/register",
   FORGOT_PASSWORD: "/forgot-password",
+  CONTACT: "/contact",
+  CALENDAR: "/calendar",
+  NOTIFICATION: "/notification",
   CATCH_ALL: "*",
 };
