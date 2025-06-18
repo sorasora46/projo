@@ -6,6 +6,7 @@ import {
   type ForgotPasswordFormData,
 } from "../schemas/forgot-password";
 import { Link } from "react-router";
+import { ProjoPath } from "../constants/path";
 
 const ForgotPassword = () => {
   const {
@@ -48,7 +49,7 @@ const ForgotPassword = () => {
           </div>
           <p className="text-center mt-3">
             Remember now?{" "}
-            <Link to="/login" className="text-blue-400">
+            <Link to={ProjoPath.LOGIN} className="text-blue-400">
               Login
             </Link>
           </p>

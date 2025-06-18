@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, type LoginFormData } from "../schemas/login";
 import { Link, useNavigate } from "react-router";
 import FieldError from "../components/FieldError";
+import { ProjoPath } from "../constants/path";
 
 const Login = () => {
   const {
@@ -45,7 +46,10 @@ const Login = () => {
                 <label htmlFor="password" className="self-start">
                   Password
                 </label>
-                <Link to="/forgot-password" className="text-xs text-info">
+                <Link
+                  to={ProjoPath.FORGOT_PASSWORD}
+                  className="text-xs text-info"
+                >
                   Forgot ?
                 </Link>
               </div>
@@ -81,7 +85,7 @@ const Login = () => {
             <button
               type="button"
               className="w-full btn btn-outline btn-secondary"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate(ProjoPath.REGISTER)}
             >
               Sign up
             </button>

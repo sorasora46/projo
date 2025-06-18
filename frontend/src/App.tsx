@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound.tsx";
 import { AuthProvider } from "./hooks/useAuth.tsx";
 import ProtectedRoutes from "./components/ProtectedRoutes.tsx";
 import ForgotPassword from "./pages/ForgotPassword.tsx";
+import { ProjoPath } from "./constants/path.ts";
 
 const App = () => {
   return (
@@ -14,12 +15,17 @@ const App = () => {
       <AuthProvider>
         <Routes>
           <Route element={<ProtectedRoutes />}>
-            <Route path="/" element={<Home />} />
+            <Route path={ProjoPath.HOME} element={<Home />} />
+            <Route path={ProjoPath.ARCHIVED} element={<Home />} />
+            <Route path={ProjoPath.DELETED} element={<Home />} />
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path={ProjoPath.LOGIN} element={<Login />} />
+          <Route path={ProjoPath.REGISTER} element={<Register />} />
+          <Route
+            path={ProjoPath.FORGOT_PASSWORD}
+            element={<ForgotPassword />}
+          />
+          <Route path={ProjoPath.CATCH_ALL} element={<NotFound />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>

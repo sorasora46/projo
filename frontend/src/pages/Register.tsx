@@ -5,6 +5,7 @@ import { HiEyeOff, HiEye } from "react-icons/hi";
 import { Link } from "react-router";
 import FieldError from "../components/FieldError";
 import { useState } from "react";
+import { ProjoPath } from "../constants/path";
 
 const Register = () => {
   const {
@@ -143,7 +144,7 @@ const Register = () => {
           </div>
           <p className="mt-2 text-center">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-400">
+            <Link to={ProjoPath.LOGIN} className="text-blue-400">
               Login
             </Link>
           </p>
