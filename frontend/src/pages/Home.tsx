@@ -6,9 +6,9 @@ const Home = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="h-dvh w-full p-3 flex bg-base-200">
+    <div className="h-dvh w-full flex flex-col md:flex-row bg-base-200">
       <Sidebar pathname={pathname} />
-      <div className="w-full flex flex-col">
+      <div className="flex flex-col w-full">
         <Topbar />
         <main className="flex-1 p-3">
           <p>Main content area</p>

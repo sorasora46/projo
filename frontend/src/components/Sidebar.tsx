@@ -14,6 +14,7 @@ const Sidebar: FC<SidebarProps> = ({ pathname }) => {
   const [isProjectHover, setIsProjectHover] = useState(false);
   const [isArchivedHover, setIsArchivedHover] = useState(false);
   const [isDeletedHover, setIsDeletedHover] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const renderNavLinks = () => (
     <ul className="menu text-xl">
@@ -24,6 +25,7 @@ const Sidebar: FC<SidebarProps> = ({ pathname }) => {
           data-tip="Home"
           onMouseEnter={() => setIsProjectHover(true)}
           onMouseLeave={() => setIsProjectHover(false)}
+          onClick={() => setIsDrawerOpen(false)}
         >
           {isProjectHover || pathname === ProjoPath.HOME ? (
             <AiFillProject />
@@ -40,6 +42,7 @@ const Sidebar: FC<SidebarProps> = ({ pathname }) => {
           data-tip="Archived"
           onMouseEnter={() => setIsArchivedHover(true)}
           onMouseLeave={() => setIsArchivedHover(false)}
+          onClick={() => setIsDrawerOpen(false)}
         >
           {isArchivedHover || pathname === ProjoPath.ARCHIVED ? (
             <RiInboxArchiveFill />
@@ -56,6 +59,7 @@ const Sidebar: FC<SidebarProps> = ({ pathname }) => {
           data-tip="Deleted"
           onMouseEnter={() => setIsDeletedHover(true)}
           onMouseLeave={() => setIsDeletedHover(false)}
+          onClick={() => setIsDrawerOpen(false)}
         >
           {isDeletedHover || pathname === ProjoPath.DELETED ? (
             <MdDelete />
@@ -69,9 +73,15 @@ const Sidebar: FC<SidebarProps> = ({ pathname }) => {
   );
 
   return (
-    <aside>
+    <aside className="self-start h-0">
       <div className="drawer md:drawer-open">
-        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <input
+          id="my-drawer-2"
+          type="checkbox"
+          className="drawer-toggle"
+          checked={isDrawerOpen}
+          onChange={(e) => setIsDrawerOpen(e.target.checked)}
+        />
         <div className="drawer-content flex flex-col items-center justify-center">
           <label htmlFor="my-drawer-2" className="btn drawer-button md:hidden">
             <FiMenu />
