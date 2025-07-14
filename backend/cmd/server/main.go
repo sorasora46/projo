@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/sorasora46/projo/backend/config"
 	"github.com/sorasora46/projo/backend/internal/middlewares"
@@ -28,6 +29,10 @@ func main() {
 		ErrorHandler:  middlewares.GlobalErrorHandler,
 	})
 	app.Use(recover.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:5173",
+		AllowCredentials: true,
+	}))
 	routers.InitRoutes(app, database, envManager, reqValidator)
 
 	app.Listen(envManager.GetAddr())
