@@ -6,6 +6,8 @@ import { LoginSchema, type LoginFormData } from "../schemas/login";
 import { Link, useNavigate } from "react-router";
 import FieldError from "../components/FieldError";
 import { ProjoPath } from "../constants/path";
+import { api } from "../apis/api";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
   const {
@@ -18,8 +20,21 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Valid form data:", data);
+  const { setAuthenticated } = useAuth();
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      console.log("Valid form data:", data);
+      await api.post("/user/login", data);
+      // TODO: show success popup
+      if (setAuthenticated) {
+        setAuthenticated(true);
+      }
+      navigate(ProjoPath.HOME);
+    } catch (error) {
+      // TODO: show error popup
+      console.error(error);
+    }
   };
 
   return (
@@ -33,13 +48,14 @@ const Login = () => {
                 Email
               </label>
               <input
+                autoComplete="email username"
                 id="email"
                 type="text"
                 placeholder="Email"
-                className={`input w-full ${errors.email ? "input-error" : "input-bordered"}`}
-                {...register("email")}
+                className={`input w-full ${errors.username ? "input-error" : "input-bordered"}`}
+                {...register("username")}
               />
-              <FieldError message={errors.email?.message} />
+              <FieldError message={errors.username?.message} />
             </div>
             <div className="w-full flex flex-col gap-1">
               <div className="flex justify-between items-center">
@@ -56,6 +72,7 @@ const Login = () => {
               <div className="relative">
                 <input
                   id="password"
+                  autoComplete="current-password"
                   type={isHidePassword ? "password" : "text"}
                   placeholder="Password"
                   className={`input w-full pr-10 ${errors.password ? "input-error" : "input-bordered"}`}

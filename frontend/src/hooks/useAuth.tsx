@@ -6,14 +6,17 @@ import {
   type FC,
   type ReactNode,
 } from "react";
+import { api } from "../apis/api";
 
 interface IAuthContext {
   authenticated: boolean;
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>> | null;
   loading: boolean;
 }
 
 const defaultAuthContext: IAuthContext = {
   authenticated: false,
+  setAuthenticated: null,
   loading: false,
 };
 
@@ -28,17 +31,13 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Simulated API call - replace with real one
     const fetchAuthStatus = async () => {
       try {
-        // Example: const response = await fetch("/api/auth/status");
-        // const data = await response.json();
-        const data = await new Promise<{ authenticated: boolean }>((resolve) =>
-          setTimeout(() => resolve({ authenticated: true }), 1000),
-        );
-
-        setAuthenticated(data.authenticated);
+        await api.get("/user/check-auth");
+        setAuthenticated(true);
       } catch (error) {
+        // TODO: show error popup
+        setAuthenticated(false);
         console.error("Failed to fetch auth status", error);
       } finally {
         setLoading(false);
@@ -48,7 +47,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     fetchAuthStatus();
   }, []);
   return (
-    <AuthContext.Provider value={{ authenticated, loading }}>
+    <AuthContext.Provider value={{ authenticated, setAuthenticated, loading }}>
       {children}
     </AuthContext.Provider>
   );
