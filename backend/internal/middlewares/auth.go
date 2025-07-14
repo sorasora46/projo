@@ -84,6 +84,12 @@ func (a *AuthMiddlewareImpl) ValidateToken(c *fiber.Ctx) error {
 		})
 	}
 
+	if path == "/api/user/check-auth" {
+		return utils.NewSuccessRes(c, dtos.Response{
+			Result: nil,
+		})
+	}
+
 	c.Locals(constants.UsernameContext, username)
 	c.Locals(constants.UserIdContext, userId)
 
