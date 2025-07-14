@@ -27,6 +27,7 @@ Minimalist project tracker written with React.js + Go Fiber
  - [x] create login page
  - [x] create not found page
 ### TODO [backend]
+ - [ ] handle query display data (for frontend) endpoint
  - [ ] implement project tasks usecase
  - [ ] create SIT for user endpoint
  - [ ] create E2E for user endpoint
