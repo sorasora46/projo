@@ -6,6 +6,8 @@ import { Link } from "react-router";
 import FieldError from "../components/FieldError";
 import { useState } from "react";
 import { ProjoPath } from "../constants/path";
+import { api } from "../apis/api";
+import { useNavigate } from "react-router";
 
 const Register = () => {
   const {
@@ -18,8 +20,17 @@ const Register = () => {
   const [isHideConfirmPassword, setIsHideConfirmPassword] =
     useState<boolean>(true);
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("Valid form data:", data);
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      await api.post("/user", data);
+      // TODO: show success popup
+      navigate(ProjoPath.LOGIN);
+    } catch (error) {
+      // TODO: show error popup
+      console.error(error);
+    }
   };
 
   return (
