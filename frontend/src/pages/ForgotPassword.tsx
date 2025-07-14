@@ -18,6 +18,7 @@ const ForgotPassword = () => {
   });
 
   const onSubmit = (data: ForgotPasswordFormData) => {
+    // TODO: implement forgot password endpoint
     console.log("Valid form data:", data);
   };
 
