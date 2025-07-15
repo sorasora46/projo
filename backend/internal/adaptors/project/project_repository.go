@@ -25,7 +25,7 @@ func (p *ProjectRepositoryImpl) Create(newProject *entities.Project) error {
 
 func (p *ProjectRepositoryImpl) GetByProjectId(projectId string) (*entities.Project, error) {
 	var project entities.Project
-	transaction := p.db.First(&project)
+	transaction := p.db.First(&project, "id = ?", projectId)
 	if transaction.Error != nil {
 		return nil, transaction.Error
 	}

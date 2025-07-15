@@ -20,4 +20,5 @@ func InitRoutes(app *fiber.App, database config.Database, envManager config.EnvM
 	api := app.Group("/api", authMiddleware.ValidateToken)
 	NewUserRoutes(api.Group("/user"), database, envManager, reqValidator)
 	NewProjectRoutes(api.Group("/project"), database, envManager, reqValidator)
+	NewProjectTaskRoutes(api.Group("/:projectId/task"), database, envManager, reqValidator)
 }
