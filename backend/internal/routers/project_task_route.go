@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sorasora46/projo/backend/config"
+	"github.com/sorasora46/projo/backend/internal/adaptors/project"
 	vldt "github.com/sorasora46/projo/backend/internal/validator"
 )
 
@@ -14,20 +15,10 @@ func NewProjectTaskRoutes(api fiber.Router, database config.Database, envManager
 
 	// projectRepo := project.NewProjectRepository(db)
 	// projectUsecase := usecases.NewProjectUsecase(projectRepo)
-	// projectHandlers := project.NewProjectHandler(projectUsecase, reqValidator)
+	handlers := project.NewProjectTaskHandler()
 
-	// TODO: group project task endpoint
-
-	api.Post("/", func(c *fiber.Ctx) error {
-		return nil
-	})
-	api.Get("/:taskId", func(c *fiber.Ctx) error {
-		return nil
-	})
-	api.Patch("/:taskId", func(c *fiber.Ctx) error {
-		return nil
-	})
-	api.Delete("/:taskId", func(c *fiber.Ctx) error {
-		return nil
-	})
+	api.Post("/", handlers.CreateTask)
+	api.Get("/:taskId", handlers.GetTaskById)
+	api.Patch("/:taskId", handlers.UpdateTaskById)
+	api.Delete("/:taskId", handlers.DeleteTaskById)
 }
