@@ -7,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import FieldError from "../components/FieldError";
 import { api } from "../apis/api";
-import { mockProjects } from "../mocks/project";
 import type { Project } from "../types/project";
 
 const Home = () => {
